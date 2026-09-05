@@ -2,6 +2,9 @@
 #include <gpio.h>
 #include <generic.h>
 
+
+// button pc 13
+
 int main(void) {
     GPIO_handle_t GPIO_handle;
     GPIO_handle.GPIO_reg = GPIOA;
@@ -15,13 +18,27 @@ int main(void) {
     GPIO_clock(GPIO_handle.GPIO_reg, ENABLE);
     GPIO_init(&GPIO_handle);
 
+    GPIO_handle_t GPIO_button;
+    GPIO_button.GPIO_reg = GPIOC;
+    GPIO_button.GPIO_config.pin = 13;
+    GPIO_button.GPIO_config.mode = GPIO_MODE_INPUT;
+    GPIO_button.GPIO_config.speed = GPIO_SPEED_LOW;
+    GPIO_button.GPIO_config.pupdr = GPIO_PULLUP;
+
+    GPIO_clock(GPIO_button.GPIO_reg, ENABLE);
+    GPIO_init(&GPIO_button);
 
     while (1) {
+        if ((GPIO_button.GPIO_reg->IDR & (1 << GPIO_button.GPIO_config.pin)) != 0) {
+            GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
+        }else {
+            GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, DISABLE);
+        }
         //GPIO_toggle_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin);
-        GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
-        for (int i = 0; i < 1000000; i++) {}
-        GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, DISABLE);
-        for (int i = 0; i < 1000000; i++) {}
+        //GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
+        //for (int i = 0; i < 1000000; i++) {}
+        //GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, DISABLE);
+        //for (int i = 0; i < 1000000; i++) {}
     }
     
 }
