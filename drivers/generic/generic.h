@@ -8,5 +8,7 @@
 #define AHB1_BUS_ADDR           (0x40020000U)
 #define AHB2_BUS_ADDR           (0x50000000U)
 
+#define ENABLE                  (1)
+#define DISABLE                 (0)
 
 #endif

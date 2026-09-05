@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <gpio.h>
+#include <generic.h>
 
 int main(void) {
     GPIO_handle_t GPIO_handle;
@@ -10,13 +11,14 @@ int main(void) {
     GPIO_handle.GPIO_config.speed = GPIO_SPEED_LOW;
     GPIO_handle.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
 
-    GPIO_clock_enable(GPIO_handle.GPIO_reg);
+    GPIO_clock(GPIO_handle.GPIO_reg, ENABLE);
     GPIO_init(&GPIO_handle);
 
 
     while (1) {
-        GPIO_handle.GPIO_reg->ODR ^= (1U << GPIO_handle.GPIO_config.pin);
-        for (int i = 0; i < 1000000; i++) {}
+        //GPIO_handle.GPIO_reg->ODR ^= (1U << GPIO_handle.GPIO_config.pin);
+        //for (int i = 0; i < 1000000; i++) {}
+        GPIO_handle.GPIO_reg->ODR |= (1U << GPIO_handle.GPIO_config.pin);
     }
     
 }

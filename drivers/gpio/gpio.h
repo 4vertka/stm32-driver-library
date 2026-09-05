@@ -81,8 +81,7 @@ void GPIO_init(GPIO_handle_t* GPIO_handle);
 void GPIO_deinit(GPIO_reg_t* GPIO_handle);
 
 
-void GPIO_clock_enable(GPIO_reg_t* GPIO_reg);
-
+void GPIO_clock(GPIO_reg_t* GPIO_reg, uint8_t mode);
 
 void GPIOA_bus_clock_enable(void);
 void GPIOB_bus_clock_enable(void);
@@ -90,5 +89,19 @@ void GPIOC_bus_clock_enable(void);
 void GPIOD_bus_clock_enable(void);
 void GPIOE_bus_clock_enable(void);
 void GPIOH_bus_clock_enable(void);
+
+void GPIOA_bus_clock_disable(void);
+void GPIOB_bus_clock_disable(void);
+void GPIOC_bus_clock_disable(void);
+void GPIOD_bus_clock_disable(void);
+void GPIOE_bus_clock_disable(void);
+void GPIOH_bus_clock_disable(void);
+
+void GPIOA_reg_reset(void);
+void GPIOB_reg_reset(void);
+void GPIOC_reg_reset(void);
+void GPIOD_reg_reset(void);
+void GPIOE_reg_reset(void);
+void GPIOH_reg_reset(void);
 
 #endif
