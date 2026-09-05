@@ -76,12 +76,37 @@ typedef struct {
 #define GPIO_AF14               (14)
 #define GPIO_AF15               (15)
 
+#define GPIO_PIN_0              (0)
+#define GPIO_PIN_1              (1)
+#define GPIO_PIN_2              (2)
+#define GPIO_PIN_3              (3)
+#define GPIO_PIN_4              (4)
+#define GPIO_PIN_5              (5)
+#define GPIO_PIN_6              (6)
+#define GPIO_PIN_7              (7)
+#define GPIO_PIN_8              (8)
+#define GPIO_PIN_9              (9)
+#define GPIO_PIN_10             (10)
+#define GPIO_PIN_11             (11)
+#define GPIO_PIN_12             (12)
+#define GPIO_PIN_13             (13)
+#define GPIO_PIN_14             (14)
+#define GPIO_PIN_15             (15)
+
 //init/deinit
 void GPIO_init(GPIO_handle_t* GPIO_handle);
 void GPIO_deinit(GPIO_reg_t* GPIO_handle);
 
 
 void GPIO_clock(GPIO_reg_t* GPIO_reg, uint8_t mode);
+
+uint8_t GPIO_read_IDR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin);
+uint16_t GPIO_read_IDR_port(GPIO_reg_t* GPIO_reg);
+
+void GPIO_write_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin, uint8_t mode);
+void GPIO_write_ODR_port(GPIO_reg_t* GPIO_reg, uint16_t value);
+
+void GPIO_toggle_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin);
 
 void GPIOA_bus_clock_enable(void);
 void GPIOB_bus_clock_enable(void);

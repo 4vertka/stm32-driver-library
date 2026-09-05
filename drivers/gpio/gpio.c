@@ -27,7 +27,6 @@ void GPIO_init(GPIO_handle_t* GPIO_handle) {
     GPIO_handle->GPIO_reg->PUPDR |= (GPIO_handle->GPIO_config.pupdr << (2 * GPIO_handle->GPIO_config.pin));
 }
 
-
 void GPIO_deinit(GPIO_reg_t* GPIO_reg) {
     if (GPIO_reg == GPIOA)
         GPIOA_reg_reset();
@@ -58,6 +57,7 @@ void GPIO_clock(GPIO_reg_t* GPIO_reg, uint8_t mode) {
             GPIOE_bus_clock_enable();
         else if (GPIO_reg == GPIOH)
             GPIOH_bus_clock_enable();
+        break;
     }
     case DISABLE: {
         if (GPIO_reg == GPIOA) 
@@ -72,9 +72,34 @@ void GPIO_clock(GPIO_reg_t* GPIO_reg, uint8_t mode) {
             GPIOE_bus_clock_disable();
         else if (GPIO_reg == GPIOH)
             GPIOH_bus_clock_disable();
+        break;
     }
     default: {}
     }
+}
+
+uint8_t GPIO_read_IDR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin) {
+    return (uint8_t)((GPIO_reg->IDR >> pin) & 1U);
+}
+
+uint16_t GPIO_read_IDR_port(GPIO_reg_t* GPIO_reg) {
+    return (uint16_t)GPIO_reg->IDR;
+}
+
+void GPIO_write_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin, uint8_t mode) {
+    if (mode == SET) {
+        GPIO_reg->ODR |= (1U << pin);    
+    }else {
+        GPIO_reg->ODR &= ~(1U << pin);
+    }
+}
+
+void GPIO_write_ODR_port(GPIO_reg_t* GPIO_reg, uint16_t value) {
+    GPIO_reg->ODR = value;
+}
+
+void GPIO_toggle_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin) {
+    GPIO_reg->ODR ^= (1U << pin);
 }
 
 void GPIOA_bus_clock_enable(void) {

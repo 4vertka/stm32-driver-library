@@ -11,14 +11,17 @@ int main(void) {
     GPIO_handle.GPIO_config.speed = GPIO_SPEED_LOW;
     GPIO_handle.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
 
+    //GPIOA_bus_clock_enable();
     GPIO_clock(GPIO_handle.GPIO_reg, ENABLE);
     GPIO_init(&GPIO_handle);
 
 
     while (1) {
-        //GPIO_handle.GPIO_reg->ODR ^= (1U << GPIO_handle.GPIO_config.pin);
-        //for (int i = 0; i < 1000000; i++) {}
-        GPIO_handle.GPIO_reg->ODR |= (1U << GPIO_handle.GPIO_config.pin);
+        //GPIO_toggle_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin);
+        GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
+        for (int i = 0; i < 1000000; i++) {}
+        GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, DISABLE);
+        for (int i = 0; i < 1000000; i++) {}
     }
     
 }
