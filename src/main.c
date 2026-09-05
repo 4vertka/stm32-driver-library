@@ -69,6 +69,112 @@ void PendSV_Handler(void) {}
 
 void Systick_Handler(void) {}
 
+void WWDG_IRQ_Handler(void) {}
+
+void EXTI16xPVD_IRQ_Handler(void) {}
+
+void EXTI21xTAMP_STAMP_IRQ_Handler(void) {}
+
+void EXTI22xRTC_WKUP_IRQ_Handler(void) {}
+
+void FLASH_IRQ_Handler(void) {}
+
+void RCC_IRQ_Handler(void) {}
+
+void EXTI0_IRQ_Handler(void) {
+}
+
+void EXTI1_IRQ_Handler(void) {}
+
+void EXTI2_IRQ_Handler(void) {}
+
+void EXTI3_IRQ_Handler(void) {}
+
+void EXTI4_IRQ_Handler(void) {}
+
+void DMA1_Stream0_IRQ_Handler(void) {}
+
+void DMA1_Stream1_IRQ_Handler(void) {}
+
+void DMA1_Stream2_IRQ_Handler(void) {}
+
+void DMA1_Stream3_IRQ_Handler(void) {}
+
+void DMA1_Stream4_IRQ_Handler(void) {}
+
+void DMA1_Stream5_IRQ_Handler(void) {}
+
+void DMA1_Stream6_IRQ_Handler(void) {}
+
+void ADC_IRQ_Handler(void) {}
+
+void EXTI9_5_IRQ_Handler(void) {}
+
+void TIM1_BRK_TIM9_IRQ_Handler(void) {}
+
+void TIM1_UP_TIM10_IRQ_Handler(void) {}
+
+void TIM1_TRG_COM_TIM11_IRQ_Handler(void) {}
+
+void TIM1_CC_IRQ_Handler(void) {}
+
+void TIM2_IRQ_Handler(void) {}
+
+void TIM3_IRQ_Handler(void) {}
+
+void TIM4_IRQ_Handler(void) {}
+
+void I2C1_EV_IRQ_Handler(void) {}
+
+void I2C1_ER_IRQ_Handler(void) {}
+
+void I2C2_EV_IRQ_Handler(void) {}
+
+void I2C2_ER_IRQ_Handler(void) {}
+
+void SPI1_IRQ_Handler(void) {}
+
+void SPI2_IRQ_Handler(void) {}
+
+void USART1_IRQ_Handler(void) {}
+
+void USART2_IRQ_Handler(void) {}
+
+void EXTI15_10_IRQ_Handler() {}
+
+void EXTI17xRTC_Alarm_IRQ_Handler(void) {}
+
+void EXTI18xOTG_FS_WKUP_IRQ_Handler(void) {}
+
+void DMA1_Stream7_IRQ_Handler(void) {}
+
+void SDIO_IRQ_Handler(void) {}
+
+void TIM5_IRQ_Handler(void) {}
+
+void SPI3_IRQ_Handler(void) {} 
+
+void DMA2_Stream0_IRQ_Handler(void) {}
+void DMA2_Stream1_IRQ_Handler(void) {}
+void DMA2_Stream2_IRQ_Handler(void) {}
+void DMA2_Stream3_IRQ_Handler(void) {}
+void DMA2_Stream4_IRQ_Handler(void) {}
+
+void OTG_FS_IRQ_Handler(void) {}
+
+void DMA2_Stream5_IRQ_Handler(void) {}
+void DMA2_Stream6_IRQ_Handler(void) {}
+void DMA2_Stream7_IRQ_Handler(void) {}
+
+void USART6_IRQ_Handler(void) {}
+
+void I2C3_EV_IRQ_Handler(void) {}
+void I2C3_ER_IRQ_Handler(void) {}
+
+void FPU_IRQ_Handler(void) {}
+
+void SPI4_IRQ_Handler(void) {}
+
 __attribute__((section(".vector_table")))
 void (*const vector_table[16+85])(void) = {
 //------------------------------internal interrupts-----------------------------------------
@@ -87,5 +193,91 @@ void (*const vector_table[16+85])(void) = {
     Debug_Monitor_Handler,
     0,
     PendSV_Handler,
-    Systick_Handler
+    Systick_Handler,
+    //------------------------------external interrupts-----------------------------------------
+    WWDG_IRQ_Handler,
+    EXTI16xPVD_IRQ_Handler,
+    EXTI21xTAMP_STAMP_IRQ_Handler,
+    EXTI22xRTC_WKUP_IRQ_Handler,
+    FLASH_IRQ_Handler,
+    RCC_IRQ_Handler,
+    EXTI0_IRQ_Handler,
+    EXTI1_IRQ_Handler,
+    EXTI2_IRQ_Handler,
+    EXTI3_IRQ_Handler,
+    EXTI4_IRQ_Handler,
+    DMA1_Stream0_IRQ_Handler,
+    DMA1_Stream1_IRQ_Handler,
+    DMA1_Stream2_IRQ_Handler,
+    DMA1_Stream3_IRQ_Handler,
+    DMA1_Stream4_IRQ_Handler,
+    DMA1_Stream5_IRQ_Handler,
+    DMA1_Stream6_IRQ_Handler,
+    ADC_IRQ_Handler,
+    0,
+    0,
+    0,
+    0,
+    EXTI9_5_IRQ_Handler,
+    TIM1_BRK_TIM9_IRQ_Handler,
+    TIM1_UP_TIM10_IRQ_Handler,
+    TIM1_TRG_COM_TIM11_IRQ_Handler,
+    TIM1_CC_IRQ_Handler,
+    TIM2_IRQ_Handler,
+    TIM3_IRQ_Handler,
+    TIM4_IRQ_Handler,
+    I2C1_EV_IRQ_Handler,
+    I2C1_ER_IRQ_Handler,
+    I2C2_EV_IRQ_Handler,
+    I2C2_ER_IRQ_Handler,
+    SPI1_IRQ_Handler,
+    SPI2_IRQ_Handler,
+    USART1_IRQ_Handler,
+    USART2_IRQ_Handler,
+    0,
+    EXTI15_10_IRQ_Handler,
+    EXTI17xRTC_Alarm_IRQ_Handler,
+    EXTI18xOTG_FS_WKUP_IRQ_Handler,
+    0,
+    0,
+    0,
+    0,
+    DMA1_Stream7_IRQ_Handler,
+    0,
+    SDIO_IRQ_Handler,
+    TIM5_IRQ_Handler,
+    SPI3_IRQ_Handler,
+    0,
+    0,
+    0,
+    0,
+    DMA2_Stream0_IRQ_Handler,
+    DMA2_Stream1_IRQ_Handler,
+    DMA2_Stream2_IRQ_Handler,
+    DMA2_Stream3_IRQ_Handler,
+    DMA2_Stream4_IRQ_Handler,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    OTG_FS_IRQ_Handler,
+    DMA2_Stream5_IRQ_Handler,
+    DMA2_Stream6_IRQ_Handler,
+    DMA2_Stream7_IRQ_Handler,
+    USART6_IRQ_Handler,
+    I2C3_EV_IRQ_Handler,
+    I2C3_ER_IRQ_Handler,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    FPU_IRQ_Handler,
+    0,
+    0,
+    SPI4_IRQ_Handler
 };
