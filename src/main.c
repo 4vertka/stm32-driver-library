@@ -28,12 +28,26 @@ int main(void) {
     GPIO_clock(GPIO_button.GPIO_reg, ENABLE);
     GPIO_init(&GPIO_button);
 
+    SYSCFG_bus_clock_enable();
+
+    //settings exti line for pin
+    SYSCFG->EXTICR[GPIO_button.GPIO_config.pin/4] &= ~(15U << ((GPIO_button.GPIO_config.pin % 4) * 4));
+    SYSCFG->EXTICR[GPIO_button.GPIO_config.pin/4] |= (2U << ((GPIO_button.GPIO_config.pin % 4) * 4));
+   
+    //type of input falling edge
+    EXTI->IMR |= (1U << GPIO_button.GPIO_config.pin);
+    EXTI->RTSR &= ~(1U << GPIO_button.GPIO_config.pin);
+    EXTI->FTSR |= (1U << GPIO_button.GPIO_config.pin);
+
+    GPIO_irq_set_priority(NVIC_IRQ_EXTI15_10, NVIC_IRQ_PRIORITY_15);
+    GPIO_irq_enable(NVIC_IRQ_EXTI15_10);
+
     while (1) {
-        if ((GPIO_button.GPIO_reg->IDR & (1 << GPIO_button.GPIO_config.pin)) != 0) {
-            GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
-        }else {
-            GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, DISABLE);
-        }
+        //if ((GPIO_button.GPIO_reg->IDR & (1 << GPIO_button.GPIO_config.pin)) != 0) {
+        //    GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
+        //}else {
+        //    GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, DISABLE);
+        //}
         //GPIO_toggle_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin);
         //GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
         //for (int i = 0; i < 1000000; i++) {}
@@ -157,7 +171,13 @@ void USART1_IRQ_Handler(void) {}
 
 void USART2_IRQ_Handler(void) {}
 
-void EXTI15_10_IRQ_Handler() {}
+void EXTI15_10_IRQ_Handler() {
+    if (EXTI->PR & (1 << GPIO_PIN_13)) {
+        EXTI->PR |= (1 << GPIO_PIN_13);
+
+        GPIO_toggle_ODR_pin(GPIOA, GPIO_PIN_5);
+    }
+}
 
 void EXTI17xRTC_Alarm_IRQ_Handler(void) {}
 

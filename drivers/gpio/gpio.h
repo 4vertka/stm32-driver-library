@@ -108,6 +108,11 @@ void GPIO_write_ODR_port(GPIO_reg_t* GPIO_reg, uint16_t value);
 
 void GPIO_toggle_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin);
 
+void GPIO_irq_set_priority(uint8_t irq_number, uint8_t priority);
+
+void GPIO_irq_enable(uint8_t irq_num);
+void GPIO_irq_disable(uint8_t irq_num);
+
 void GPIOA_bus_clock_enable(void);
 void GPIOB_bus_clock_enable(void);
 void GPIOC_bus_clock_enable(void);
