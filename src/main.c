@@ -1,3 +1,4 @@
+#include "rcc.h"
 #include <stdint.h>
 #include <gpio.h>
 #include <generic.h>
@@ -6,13 +7,15 @@
 // button pc 13
 
 int main(void) {
+    /*
     GPIO_handle_t GPIO_handle;
     GPIO_handle.GPIO_reg = GPIOA;
     GPIO_handle.GPIO_config.pin = 5;
-    GPIO_handle.GPIO_config.mode = GPIO_MODE_OUTPUT;
+    GPIO_handle.GPIO_config.mode = GPIO_MODE_AF;
     GPIO_handle.GPIO_config.otyper = GPIO_PUSH_PULL;
     GPIO_handle.GPIO_config.speed = GPIO_SPEED_LOW;
     GPIO_handle.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
+    GPIO_handle.GPIO_config.af = GPIO_AF5;
 
     //GPIOA_bus_clock_enable();
     GPIO_clock(GPIO_handle.GPIO_reg, ENABLE);
@@ -41,7 +44,42 @@ int main(void) {
     GPIO_irq_exti_setup(GPIO_button.GPIO_config.pin, GPIO_EXTI_FALLING_EDGE);
     GPIO_irq_set_priority(NVIC_IRQ_EXTI15_10, NVIC_IRQ_PRIORITY_15);
     GPIO_irq_enable(NVIC_IRQ_EXTI15_10);
+    */
+    
+    /*
+    GPIO_handle_t GPIO_mco;
+    GPIO_mco.GPIO_reg = GPIOA;
+    GPIO_mco.GPIO_config.pin = 8;
+    GPIO_mco.GPIO_config.mode = GPIO_MODE_AF;
+    GPIO_mco.GPIO_config.speed = GPIO_SPEED_LOW;
+    GPIO_mco.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
+    GPIO_mco.GPIO_config.af = GPIO_AF0;
 
+    //activating hse 
+    RCC->CR |= (1U << 16);
+    while (!(RCC->CR & (1 << 17))) {}
+
+    //pll config
+    RCC->CR |= (1U << 24);
+    while (!(RCC->CR & (1 << 25))) {}
+
+    // reading external clock MCO1
+    RCC->CFGR &= ~(3U << 21);
+    RCC->CFGR |= (MCO1_HSE_CLOCK << 21);
+   
+    // reading pll clock MCO2
+    RCC->CFGR &= ~(3U << 30);
+    RCC->CFGR |= (MCO2_PLCC_CLOCK << 30);
+    
+    RCC->CFGR &= ~(7U << 27);
+    RCC->CFGR |= (4U << 27)
+    */
+
+    RCC_HSE_enable();
+    RCC_PLL_enable();
+    RCC_MCO1(RCC_MCO1_HSE_CLOCK, RCC_MCO1PRE_DIV2);
+    RCC_MCO2(RCC_MCO2_PLL_CLOCK, RCC_MCO2PRE_DIV2);
+    
     while (1) {
         //if ((GPIO_button.GPIO_reg->IDR & (1 << GPIO_button.GPIO_config.pin)) != 0) {
         //    GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);

@@ -44,6 +44,43 @@ typedef struct {
 #define RCC_HSE_ON              (16)
 #define RCC_HSE_RDY             (17)
 
+#define RCC_PLL_ON              (24)
+#define RCC_PLL_RDY             (25)
+
+#define RCC_PLLSRC              (22)
+
+#define RCC_MCO1_HSI_CLOCK      (0)
+#define RCC_MCO1_LSE_CLOCK      (1)
+#define RCC_MCO1_HSE_CLOCK      (2)
+#define RCC_MCO1_PLL_CLOCK      (3)
+
+#define RCC_MCO1PRE_DIVNO       (0)
+#define RCC_MCO1PRE_DIV2        (4)
+#define RCC_MCO1PRE_DIV3        (5)
+#define RCC_MCO1PRE_DIV4        (6)
+#define RCC_MCO1PRE_DIV5        (7)
+
+#define RCC_MCO2_SYSCLK         (0)
+#define RCC_MCO2_PLLI2S_CLOCK   (1) 
+#define RCC_MCO2_HSE_CLOCK      (2) 
+#define RCC_MCO2_PLL_CLOCK     (3)
+
+#define RCC_MCO2PRE_DIVNO       (0)
+#define RCC_MCO2PRE_DIV2        (4)
+#define RCC_MCO2PRE_DIV3        (5)
+#define RCC_MCO2PRE_DIV4        (6)
+#define RCC_MCO2PRE_DIV5        (7)
+
 void RCC_HSE_enable(void);
+void RCC_HSE_disable(void);
+
+void RCC_HSI_enable(void);
+void RCC_HSI_disable(void);
+
+void RCC_PLL_enable(void);
+void RCC_PLL_disable(void);
+
+void RCC_MCO1(uint8_t clock, uint8_t div);
+void RCC_MCO2(uint8_t clock, uint8_t div);
 
 #endif
