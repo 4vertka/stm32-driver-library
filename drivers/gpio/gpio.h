@@ -21,6 +21,7 @@ typedef struct {
     uint8_t otyper;
     uint8_t speed;
     uint8_t pupdr;
+    uint8_t af;
 } GPIO_config_t;
 
 typedef struct {
@@ -93,6 +94,9 @@ typedef struct {
 #define GPIO_PIN_14             (14)
 #define GPIO_PIN_15             (15)
 
+#define GPIO_EXTI_FALLING_EDGE  (0)
+#define GPIO_EXTI_RISING_EDGE   (1)
+
 //init/deinit
 void GPIO_init(GPIO_handle_t* GPIO_handle);
 void GPIO_deinit(GPIO_reg_t* GPIO_handle);
@@ -108,6 +112,7 @@ void GPIO_write_ODR_port(GPIO_reg_t* GPIO_reg, uint16_t value);
 
 void GPIO_toggle_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin);
 
+void GPIO_irq_exti_setup(uint8_t pin, uint8_t mode);
 void GPIO_irq_set_priority(uint8_t irq_number, uint8_t priority);
 
 void GPIO_irq_enable(uint8_t irq_num);

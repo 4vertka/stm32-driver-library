@@ -11,6 +11,7 @@ GPIO_reg_t* const GPIOH_dbg = GPIOH;
 
 void GPIO_init(GPIO_handle_t* GPIO_handle) {
     //mode setup (moder)
+
     GPIO_handle->GPIO_reg->MODER &= ~(3U << GPIO_handle->GPIO_config.pin);
     GPIO_handle->GPIO_reg->MODER |= (GPIO_handle->GPIO_config.mode << (2 * GPIO_handle->GPIO_config.pin));
     
@@ -25,6 +26,17 @@ void GPIO_init(GPIO_handle_t* GPIO_handle) {
     //pull-up/pull-down
     GPIO_handle->GPIO_reg->PUPDR &= ~(3U << GPIO_handle->GPIO_config.pin);
     GPIO_handle->GPIO_reg->PUPDR |= (GPIO_handle->GPIO_config.pupdr << (2 * GPIO_handle->GPIO_config.pin));
+
+    //alternate function 
+    if (GPIO_handle->GPIO_config.mode == GPIO_MODE_AF) {
+        if (GPIO_handle->GPIO_config.pin <= GPIO_PIN_7) {
+            GPIO_handle->GPIO_reg->AFR[0] = (GPIO_handle->GPIO_config.af << (GPIO_handle->GPIO_config.pin * 4));
+        }
+        if (GPIO_handle->GPIO_config.pin > 7 && GPIO_handle->GPIO_config.pin <= 15) {
+            GPIO_handle->GPIO_reg->AFR[1] = (GPIO_handle->GPIO_config.af << ((GPIO_handle->GPIO_config.pin - 8) * 4));
+        }
+    }
+
 }
 
 void GPIO_deinit(GPIO_reg_t* GPIO_reg) {
@@ -100,6 +112,24 @@ void GPIO_write_ODR_port(GPIO_reg_t* GPIO_reg, uint16_t value) {
 
 void GPIO_toggle_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin) {
     GPIO_reg->ODR ^= (1U << pin);
+}
+
+void GPIO_irq_exti_setup(uint8_t pin, uint8_t mode) {
+    //setting exti line for a pin
+    SYSCFG->EXTICR[pin/4] &= ~(15U << ((pin % 4) * 4));
+    SYSCFG->EXTICR[pin/4] |= (2U << ((pin % 4) * 4));
+
+
+    EXTI->IMR |= (1U << pin);
+
+    //falling/rising edge
+    if (mode == GPIO_EXTI_FALLING_EDGE) {
+        EXTI->RTSR &= ~(1U << pin);
+        EXTI->FTSR |= (1U << pin);
+    }else if (mode == GPIO_EXTI_RISING_EDGE) {
+        EXTI->RTSR |= (1U << pin);
+        EXTI->FTSR &= ~(1U << pin);
+    }
 }
 
 void GPIO_irq_set_priority(uint8_t irq_number, uint8_t priority) {

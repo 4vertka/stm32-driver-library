@@ -38,4 +38,12 @@ typedef struct {
 #define RCC_ADDR                (0x40023800U)
 #define RCC                     ((RCC_reg_t*) RCC_ADDR)
 
+#define RCC_HSI_ON              (0)
+#define RCC_HSI_RDY             (1)
+
+#define RCC_HSE_ON              (16)
+#define RCC_HSE_RDY             (17)
+
+void RCC_HSE_enable(void);
+
 #endif

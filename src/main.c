@@ -31,14 +31,14 @@ int main(void) {
     SYSCFG_bus_clock_enable();
 
     //settings exti line for pin
-    SYSCFG->EXTICR[GPIO_button.GPIO_config.pin/4] &= ~(15U << ((GPIO_button.GPIO_config.pin % 4) * 4));
-    SYSCFG->EXTICR[GPIO_button.GPIO_config.pin/4] |= (2U << ((GPIO_button.GPIO_config.pin % 4) * 4));
+    //SYSCFG->EXTICR[GPIO_button.GPIO_config.pin/4] &= ~(15U << ((GPIO_button.GPIO_config.pin % 4) * 4));
+    //SYSCFG->EXTICR[GPIO_button.GPIO_config.pin/4] |= (2U << ((GPIO_button.GPIO_config.pin % 4) * 4));
    
     //type of input falling edge
-    EXTI->IMR |= (1U << GPIO_button.GPIO_config.pin);
-    EXTI->RTSR &= ~(1U << GPIO_button.GPIO_config.pin);
-    EXTI->FTSR |= (1U << GPIO_button.GPIO_config.pin);
-
+   // EXTI->IMR |= (1U << GPIO_button.GPIO_config.pin);
+    //EXTI->RTSR &= ~(1U << GPIO_button.GPIO_config.pin);
+    //EXTI->FTSR |= (1U << GPIO_button.GPIO_config.pin);
+    GPIO_irq_exti_setup(GPIO_button.GPIO_config.pin, GPIO_EXTI_FALLING_EDGE);
     GPIO_irq_set_priority(NVIC_IRQ_EXTI15_10, NVIC_IRQ_PRIORITY_15);
     GPIO_irq_enable(NVIC_IRQ_EXTI15_10);
 
