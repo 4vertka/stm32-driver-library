@@ -71,6 +71,30 @@ typedef struct {
 #define RCC_MCO2PRE_DIV4        (6)
 #define RCC_MCO2PRE_DIV5        (7)
 
+#define RCC_DEFAULT_PLLM_VAL    (16)
+#define RCC_DEFAULT_PLLN_VAL    (336)
+#define RCC_DEFAULT_PLLP_VAL    (1)
+
+#define RCC_AHB_DIV1            (1)
+#define RCC_AHB_DIV2            (8)
+#define RCC_AHB_DIV4            (9)
+#define RCC_AHB_DIV8            (10)
+#define RCC_AHB_DIV16           (11)
+#define RCC_AHB_DIV64           (12)
+#define RCC_AHB_DIV128          (13)
+#define RCC_AHB_DIV256          (14)
+#define RCC_AHB_DIV512          (15)
+
+#define RCC_APB_DIV1            (1) 
+#define RCC_APB_DIV2            (4)
+#define RCC_APB_DIV4            (5)
+#define RCC_APB_DIV8            (6)
+#define RCC_APB_DIV16           (7)
+
+#define RCC_HSI_SYSCLOCK        (0)
+#define RCC_HSE_SYSCLOCK        (1) 
+#define RCC_PLL_SYSCLOCK        (2) 
+
 void RCC_HSE_enable(void);
 void RCC_HSE_disable(void);
 
@@ -79,6 +103,16 @@ void RCC_HSI_disable(void);
 
 void RCC_PLL_enable(void);
 void RCC_PLL_disable(void);
+
+void RCC_PWR_config(void);
+
+void RCC_FLASH_config(uint8_t latency);
+
+void RCC_bus_prescaler_config(uint8_t ahb, uint8_t apb1, uint8_t apb2);
+
+void RCC_set_sysclock(uint8_t src);
+
+void RCC_SysClock_Init(void);
 
 void RCC_MCO1(uint8_t clock, uint8_t div);
 void RCC_MCO2(uint8_t clock, uint8_t div);

@@ -8,12 +8,6 @@ void RCC_HSE_enable(void) {
     //activate hse in cr register
     RCC->CR |= (1U << RCC_HSE_ON);
     while (!(RCC->CR & (1U << RCC_HSE_RDY))) {}
-
-    //RCC->PLLCFGR |= (1U << RCC_PLLSRC);
-
-    //pll config
-    //RCC->CR |= (1U << RCC_PLL_ON);
-    //while (!(RCC->CR & (1 << RCC_PLL_RDY))) {}
 }
 
 void RCC_HSE_disable(void) {
@@ -29,15 +23,73 @@ void RCC_HSI_disable() {
     RCC->CR &= ~(1U << RCC_HSI_ON);
 }
 
-void RCC_PLL_enable(void) {
-    RCC->PLLCFGR |= (1U << RCC_PLLSRC);
+void RCC_PLL_config(uint8_t m, uint16_t n, uint8_t p, uint8_t q) {
+    RCC->PLLCFGR &= ~(0x3FU << 0);
+    RCC->PLLCFGR |= ((m & 0x3FU) << 0);
 
+    RCC->PLLCFGR &= ~(0x1FFU << 6);
+    RCC->PLLCFGR |= ((n & 0x1FFU) << 6);
+
+    RCC->PLLCFGR &= ~(0x3U << 16);
+    RCC->PLLCFGR |= ((p & 0x3U) << 16);
+
+    RCC->PLLCFGR &= ~(0xFU << 24);
+    RCC->PLLCFGR |= ((q & 0xFU) << 24);
+
+    RCC->PLLCFGR |= (1U << RCC_PLLSRC);
+}
+
+void RCC_PLL_enable(void) {
     RCC->CR |= (1U << RCC_PLL_ON);
     while (!(RCC->CR & (1 << RCC_PLL_RDY))) {}
 }
 
 void RCC_PLL_disable(void) {
     RCC->CR &= ~(1U << RCC_PLL_ON);
+}
+
+void RCC_PWR_config(void) {
+    //power interface clock enable
+    RCC->APB1ENR |= (1U << 28);
+    //voltage regulator
+    PWR->CR |= (3U << 14);
+}
+
+void RCC_FLASH_config(uint8_t latency) {
+    FLASH_REG->ACR |= (1U << 9); 
+    FLASH_REG->ACR |= (1U << 10);
+    FLASH_REG->ACR |= (1U << 8); 
+    FLASH_REG->ACR |= (latency << 0); 
+}
+
+void RCC_bus_prescaler_config(uint8_t ahb, uint8_t apb1, uint8_t apb2) {
+    // AHB1 prescaler 
+    RCC->CFGR &= ~(15U << 4);
+    RCC->CFGR |= (ahb << 4);
+    
+    // APB1 prescaler
+    RCC->CFGR &= ~(7U << 10);
+    RCC->CFGR |= (apb1 << 10);
+    
+    // APB2 prescaler 
+    RCC->CFGR &= ~(7U << 13);
+    RCC->CFGR |= (apb2 << 13);
+}
+
+void RCC_set_sysclock(uint8_t src) {
+    RCC->CFGR &= ~(3U << 0);
+    RCC->CFGR |= (src << 0);
+    while (((RCC->CFGR >> 2) & 3U) != src) {}
+}
+
+void RCC_SysClock_Init(void) {
+    RCC_HSE_enable();
+    RCC_PWR_config();
+    RCC_FLASH_config(5);
+    RCC_bus_prescaler_config(RCC_AHB_DIV1, RCC_APB_DIV4, RCC_APB_DIV2);
+    RCC_PLL_config(RCC_DEFAULT_PLLM_VAL, RCC_DEFAULT_PLLN_VAL, RCC_DEFAULT_PLLP_VAL, 7);
+    RCC_PLL_enable();
+    RCC_set_sysclock(RCC_PLL_SYSCLOCK);
 }
 
 void RCC_MCO1(uint8_t clock, uint8_t div) {
@@ -85,3 +137,4 @@ void RCC_MCO2(uint8_t clock, uint8_t div) {
     RCC->CFGR |= ((div & 7U) << 27);
 
 }
+

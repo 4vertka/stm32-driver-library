@@ -25,6 +25,26 @@ typedef struct {
 #define EXTI_ADDR               (0x40013C00U)
 #define EXTI                    ((EXTI_reg_t*) EXTI_ADDR)
 
+typedef struct {
+    volatile uint32_t CR;
+    volatile uint32_t CSR;
+} PWR_reg_t;
+
+#define PWR_ADDR                (0x40007000U)
+#define PWR                     ((PWR_reg_t*) PWR_ADDR)
+
+typedef struct {
+    volatile uint32_t ACR;
+    volatile uint32_t KEYR;
+    volatile uint32_t OPTKEYR;
+    volatile uint32_t SR;
+    volatile uint32_t CR;
+    volatile uint32_t OPTCR;
+} FLASH_reg_t;
+
+#define FLASH_REG_ADDR          (0x40023C00U)
+#define FLASH_REG               ((FLASH_reg_t*)FLASH_REG_ADDR)
+
 // Busses base addresses
 #define APB1_BUS_ADDR           (0x40000000U)
 #define APB2_BUS_ADDR           (0x40010000U)
