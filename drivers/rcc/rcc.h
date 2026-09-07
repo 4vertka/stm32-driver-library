@@ -95,6 +95,9 @@ typedef struct {
 #define RCC_HSE_SYSCLOCK        (1) 
 #define RCC_PLL_SYSCLOCK        (2) 
 
+#define HSI_CLOCK_SPEED         (16)
+#define HSE_CLOCK_SPEED         (8)
+
 void RCC_HSE_enable(void);
 void RCC_HSE_disable(void);
 
@@ -113,6 +116,8 @@ void RCC_bus_prescaler_config(uint8_t ahb, uint8_t apb1, uint8_t apb2);
 void RCC_set_sysclock(uint8_t src);
 
 void RCC_SysClock_Init(void);
+
+uint32_t Get_PLL_frequ(void);
 
 void RCC_MCO1(uint8_t clock, uint8_t div);
 void RCC_MCO2(uint8_t clock, uint8_t div);

@@ -2,6 +2,15 @@
 #include <gpio.h>
 #include <generic.h>
 
+/*
+ * 1. Enable HSE 
+ * 2. Enable power (PW) and voltage regulator
+ * 3. Set FLASH prefatch and latency 
+ * 4. Set prescaler 
+ * 5. Enable PLL clock 
+ * 6. Set the clock source
+*/
+
 RCC_reg_t* const RCC_dbg = RCC;
 
 void RCC_HSE_enable(void) {
@@ -19,7 +28,7 @@ void RCC_HSI_enable(void) {
     while (!(RCC->CR & (1U << RCC_HSI_RDY))) {}
 }
 
-void RCC_HSI_disable() {
+void RCC_HSI_disable(void) {
     RCC->CR &= ~(1U << RCC_HSI_ON);
 }
 
@@ -56,10 +65,10 @@ void RCC_PWR_config(void) {
 }
 
 void RCC_FLASH_config(uint8_t latency) {
+    FLASH_REG->ACR |= (latency << 0); 
     FLASH_REG->ACR |= (1U << 9); 
     FLASH_REG->ACR |= (1U << 10);
     FLASH_REG->ACR |= (1U << 8); 
-    FLASH_REG->ACR |= (latency << 0); 
 }
 
 void RCC_bus_prescaler_config(uint8_t ahb, uint8_t apb1, uint8_t apb2) {
@@ -90,6 +99,38 @@ void RCC_SysClock_Init(void) {
     RCC_PLL_config(RCC_DEFAULT_PLLM_VAL, RCC_DEFAULT_PLLN_VAL, RCC_DEFAULT_PLLP_VAL, 7);
     RCC_PLL_enable();
     RCC_set_sysclock(RCC_PLL_SYSCLOCK);
+}
+
+uint32_t Get_PLL_frequ(void) {
+    uint32_t PLL_clock_speed = 0;
+    uint32_t PLL_src= 0;
+    uint8_t m = 0;
+    uint16_t n = 0;
+    uint16_t n_mask = 0;
+    uint8_t p = 0;
+    
+    if (RCC->PLLCFGR & (1 << 22)) {
+        PLL_src = HSE_CLOCK_SPEED;
+    } else {
+        PLL_src = HSI_CLOCK_SPEED;
+    }
+  
+    //get PLLM 
+    m = RCC->CFGR & 63U;
+
+    //get PLLP
+    p = 2 * ((RCC->PLLCFGR & (3 << 16)) + 1);
+
+    //get PLLN
+    for (int32_t i = 6; i <= 14; i++) {
+        n_mask |= (1U << i);
+    }    
+    n = (RCC->PLLCFGR & n_mask) >> 6;
+
+    PLL_clock_speed = (PLL_src * n) / (p * m);
+
+    return PLL_clock_speed;
+
 }
 
 void RCC_MCO1(uint8_t clock, uint8_t div) {
