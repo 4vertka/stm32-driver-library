@@ -9,24 +9,32 @@
 
 int main(void) {
 
-    GPIOA_bus_clock_enable();
 
-    GPIO_handle_t GPIO_led;
-    GPIO_led.GPIO_reg = GPIOA;
-    GPIO_led.GPIO_config.pin = 5;
-    GPIO_led.GPIO_config.mode = GPIO_MODE_OUTPUT;
-    GPIO_led.GPIO_config.otyper = GPIO_PUSH_PULL;
-    GPIO_led.GPIO_config.speed = GPIO_SPEED_LOW;
-    GPIO_led.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
-
-    GPIO_init(&GPIO_led);
+    GPIO_clock(GPIOA, ENABLE);
     
-    GPIO_irq_set_priority(uint8_t irq_number, uint8_t priority);    
-    SYSTICK_init(16000000, SYST_CLKSRC_INTERNAL, SYST_TICKINT_EXT, SYST_COUNTER_ENABLE);
+    GPIO_handle_t GPIO_tx;
+    GPIO_tx.GPIO_reg = GPIOA;
+    GPIO_tx.GPIO_config.pin = 2;
+    GPIO_tx.GPIO_config.mode = GPIO_MODE_AF;
+    GPIO_tx.GPIO_config.otyper = GPIO_PUSH_PULL;
+    GPIO_tx.GPIO_config.speed = GPIO_SPEED_LOW;
+    GPIO_tx.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
+    GPIO_tx.GPIO_config.af = GPIO_AF7;
+    
+    GPIO_init(&GPIO_tx);
+
+    GPIO_handle_t GPIO_rx;
+    GPIO_rx.GPIO_reg = GPIOA;
+    GPIO_rx.GPIO_config.pin = 3;
+    GPIO_rx.GPIO_config.mode = GPIO_MODE_AF;
+    GPIO_rx.GPIO_config.otyper = GPIO_PUSH_PULL;
+    GPIO_rx.GPIO_config.speed = GPIO_SPEED_LOW;
+    GPIO_rx.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
+    GPIO_rx.GPIO_config.af = GPIO_AF7;
+
+    GPIO_init(&GPIO_rx);
 
     while (1) {
-        SYSTICK_delay(500);
-        GPIO_toggle_ODR_pin(GPIO_led.GPIO_reg, GPIO_led.GPIO_config.pin);
     }
 }
 

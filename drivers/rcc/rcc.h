@@ -119,6 +119,8 @@ void RCC_SysClock_Init(void);
 
 uint32_t RCC_Get_PLL_frequ(void);
 
+void RCC_USART2_bus_clock_enable(void);
+
 void RCC_MCO1(uint8_t clock, uint8_t div);
 void RCC_MCO2(uint8_t clock, uint8_t div);
 

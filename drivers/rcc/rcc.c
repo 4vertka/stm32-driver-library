@@ -133,6 +133,10 @@ uint32_t RCC_Get_PLL_frequ(void) {
 
 }
 
+void RCC_USART2_bus_clock_enable(void) {
+    RCC->APB1ENR |= (1U << 17);
+}
+
 void RCC_MCO1(uint8_t clock, uint8_t div) {
     // MCO1 = PA8
     GPIO_handle_t GPIO_MCO1;
