@@ -75,12 +75,23 @@ int main(void) {
     RCC->CFGR |= (4U << 27)
     */
 
-    RCC_HSE_enable();
-    RCC_PLL_enable();
+    //RCC_HSE_enable();
+    //RCC_PLL_enable();
+    //RCC_MCO1(RCC_MCO1_HSE_CLOCK, RCC_MCO1PRE_DIV2);
+    //RCC_MCO2(RCC_MCO2_PLL_CLOCK, RCC_MCO2PRE_DIV2);
+  
+    //RCC_SysClock_Init();
+    //uint32_t val;
+    
+    for (volatile int i = 0; i < 100000; i++) {}   // let debugger attach on HSI first
+    RCC_SysClock_Init();
     RCC_MCO1(RCC_MCO1_HSE_CLOCK, RCC_MCO1PRE_DIV2);
     RCC_MCO2(RCC_MCO2_PLL_CLOCK, RCC_MCO2PRE_DIV2);
-    
-    while (1) {
+    while (1) {}
+
+
+    //while (1) {
+        //val = RCC_Get_PLL_frequ();
         //if ((GPIO_button.GPIO_reg->IDR & (1 << GPIO_button.GPIO_config.pin)) != 0) {
         //    GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, ENABLE);
         //}else {
@@ -91,7 +102,7 @@ int main(void) {
         //for (int i = 0; i < 1000000; i++) {}
         //GPIO_write_ODR_pin(GPIO_handle.GPIO_reg, GPIO_handle.GPIO_config.pin, DISABLE);
         //for (int i = 0; i < 1000000; i++) {}
-    }
+    //}
     
 }
 

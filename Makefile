@@ -43,6 +43,7 @@ flash: $(BUILD_DIR)/$(BIN)
 
 debug: $(BUILD_DIR)/$(TARGET)
 	openocd -f board/st_nucleo_f4.cfg \
+	-c "reset_config srst_only srst_nogate connect_assert_srst" \
 	-c "init" \
 	-c "reset halt" \
 	-c "program $< verify" \

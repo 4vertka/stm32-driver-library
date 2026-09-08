@@ -33,18 +33,17 @@ void RCC_HSI_disable(void) {
 }
 
 void RCC_PLL_config(uint8_t m, uint16_t n, uint8_t p, uint8_t q) {
+    RCC_PLL_disable();
+    while (RCC->CR & (1U << RCC_PLL_RDY)) {} 
+
     RCC->PLLCFGR &= ~(0x3FU << 0);
     RCC->PLLCFGR |= ((m & 0x3FU) << 0);
-
     RCC->PLLCFGR &= ~(0x1FFU << 6);
     RCC->PLLCFGR |= ((n & 0x1FFU) << 6);
-
     RCC->PLLCFGR &= ~(0x3U << 16);
     RCC->PLLCFGR |= ((p & 0x3U) << 16);
-
     RCC->PLLCFGR &= ~(0xFU << 24);
     RCC->PLLCFGR |= ((q & 0xFU) << 24);
-
     RCC->PLLCFGR |= (1U << RCC_PLLSRC);
 }
 
@@ -101,7 +100,7 @@ void RCC_SysClock_Init(void) {
     RCC_set_sysclock(RCC_PLL_SYSCLOCK);
 }
 
-uint32_t Get_PLL_frequ(void) {
+uint32_t RCC_Get_PLL_frequ(void) {
     uint32_t PLL_clock_speed = 0;
     uint32_t PLL_src= 0;
     uint8_t m = 0;
@@ -116,10 +115,11 @@ uint32_t Get_PLL_frequ(void) {
     }
   
     //get PLLM 
-    m = RCC->CFGR & 63U;
+    m = RCC->PLLCFGR & 0x3FU;
 
     //get PLLP
-    p = 2 * ((RCC->PLLCFGR & (3 << 16)) + 1);
+    uint8_t p_code = (RCC->PLLCFGR >> 16) & 0x3U;
+    p = (p_code + 1) * 2;
 
     //get PLLN
     for (int32_t i = 6; i <= 14; i++) {
