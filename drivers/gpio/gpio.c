@@ -30,10 +30,12 @@ void GPIO_init(GPIO_handle_t* GPIO_handle) {
     //alternate function 
     if (GPIO_handle->GPIO_config.mode == GPIO_MODE_AF) {
         if (GPIO_handle->GPIO_config.pin <= GPIO_PIN_7) {
-            GPIO_handle->GPIO_reg->AFR[0] = (GPIO_handle->GPIO_config.af << (GPIO_handle->GPIO_config.pin * 4));
+            GPIO_handle->GPIO_reg->AFR[0] &= ~(15U << (GPIO_handle->GPIO_config.pin * 4));
+            GPIO_handle->GPIO_reg->AFR[0] |= (GPIO_handle->GPIO_config.af << (GPIO_handle->GPIO_config.pin * 4));
         }
         if (GPIO_handle->GPIO_config.pin > 7 && GPIO_handle->GPIO_config.pin <= 15) {
-            GPIO_handle->GPIO_reg->AFR[1] = (GPIO_handle->GPIO_config.af << ((GPIO_handle->GPIO_config.pin - 8) * 4));
+            GPIO_handle->GPIO_reg->AFR[1] &= ~(15U << ((GPIO_handle->GPIO_config.pin - 8) * 4));
+            GPIO_handle->GPIO_reg->AFR[1] |= (GPIO_handle->GPIO_config.af << ((GPIO_handle->GPIO_config.pin - 8) * 4));
         }
     }
 
