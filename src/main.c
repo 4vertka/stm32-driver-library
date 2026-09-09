@@ -1,5 +1,6 @@
 #include "rcc.h"
 #include "systick/systick.h"
+#include "uart.h"
 #include <stdint.h>
 #include <gpio.h>
 #include <generic.h>
@@ -9,32 +10,21 @@
 
 int main(void) {
 
+    //RCC_SysClock_Init();
 
-    GPIO_clock(GPIOA, ENABLE);
-    
-    GPIO_handle_t GPIO_tx;
-    GPIO_tx.GPIO_reg = GPIOA;
-    GPIO_tx.GPIO_config.pin = 2;
-    GPIO_tx.GPIO_config.mode = GPIO_MODE_AF;
-    GPIO_tx.GPIO_config.otyper = GPIO_PUSH_PULL;
-    GPIO_tx.GPIO_config.speed = GPIO_SPEED_LOW;
-    GPIO_tx.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
-    GPIO_tx.GPIO_config.af = GPIO_AF7;
-    
-    GPIO_init(&GPIO_tx);
+    SYSTICK_init(16000000, SYST_CLKSRC_INTERNAL, SYST_TICKINT_EXT, ENABLE);
 
-    GPIO_handle_t GPIO_rx;
-    GPIO_rx.GPIO_reg = GPIOA;
-    GPIO_rx.GPIO_config.pin = 3;
-    GPIO_rx.GPIO_config.mode = GPIO_MODE_AF;
-    GPIO_rx.GPIO_config.otyper = GPIO_PUSH_PULL;
-    GPIO_rx.GPIO_config.speed = GPIO_SPEED_LOW;
-    GPIO_rx.GPIO_config.pupdr = GPIO_NO_PULLUP_NO_PULLDOWN;
-    GPIO_rx.GPIO_config.af = GPIO_AF7;
+    USART_handle_t usart;
+    usart.USART_reg = USART2;
+    usart.USART_config.baud = 9600;
+    usart.USART_config.word_length = USART_8_DATA_BITS;
 
-    GPIO_init(&GPIO_rx);
+    USART2_config(&usart);
 
     while (1) {
+        USART2_send_char('a');
+        SYSTICK_delay(1000);
+        uint8_t data = USART2_get_char();
     }
 }
 
