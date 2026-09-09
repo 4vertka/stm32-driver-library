@@ -44,10 +44,10 @@ typedef struct {
 
 void USART2_config(USART_handle_t* USART_handle);
 
-void USART2_send_char(uint8_t chr); 
-void USART2_send_string(uint8_t* string);
+void USART2_transmit_char(uint8_t chr); 
+void USART2_transmit_string(uint8_t* string);
 
-uint8_t USART2_get_char(void);
+uint8_t USART2_receive_char(void);
 
 
 #endif

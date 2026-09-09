@@ -30,7 +30,7 @@ all: $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/$(BIN)
 
 $(BUILD_DIR)/$(TARGET): $(OBJECT_FILES)
 	$(shell mkdir -p $(BUILD_DIR))
-	$(CC) $(CFLAGS) $(LINKER_FLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $(LINKER_FLAGS) -o $@ $^ -lgcc
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@

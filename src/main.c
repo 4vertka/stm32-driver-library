@@ -10,7 +10,7 @@
 
 int main(void) {
 
-    //RCC_SysClock_Init();
+    RCC_SysClock_Init();
 
     SYSTICK_init(16000000, SYST_CLKSRC_INTERNAL, SYST_TICKINT_EXT, ENABLE);
 
@@ -22,9 +22,13 @@ int main(void) {
     USART2_config(&usart);
 
     while (1) {
-        USART2_send_char('a');
+        USART2_transmit_char('b');
         SYSTICK_delay(1000);
-        uint8_t data = USART2_get_char();
+            
+        if (USART2->SR & (1 << 5)) {
+            uint8_t data = USART2->DR;
+        }
+    
     }
 }
 

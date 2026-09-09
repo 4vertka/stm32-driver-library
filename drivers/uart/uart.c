@@ -33,7 +33,7 @@ void USART2_config(USART_handle_t* USART_handle) {
     USART2->CR1 |= (USART_handle->USART_config.word_length << 12);
     
     //baud rate 
-    uint32_t pll_freq = RCC_Get_PLL_frequ();
+    /*uint32_t pll_freq = RCC_Get_PLL_frequ();
     float usart_div = 16000000.0 / (float)USART_handle->USART_config.baud;
     
     uint16_t usart_div_mantissa = (uint16_t) usart_div;
@@ -50,24 +50,29 @@ void USART2_config(USART_handle_t* USART_handle) {
     USART2->BRR |= usart_div_fraction;
     USART2->BRR |= (usart_div_mantissa << 4);
 
+    */
+    uint32_t apb1_hsi_freq = 21000000;
+    //uint32_t apb1_hsi_freq = //RCC_Get_PLL_frequ();
+    USART2->BRR = apb1_hsi_freq / USART_handle->USART_config.baud;
+
     //usart rx/tx enable 
     USART2->CR1 |= (1U << 2);       //receive enable
     USART2->CR1 |= (1U << 3);       //transmit enable
 
 }
 
-void USART2_send_char(uint8_t chr) {
+void USART2_transmit_char(uint8_t chr) {
     //copy data in USART2->DR register and wait until TC = 1
+
+    while (!(USART2->SR & (1U << 7))) {}   //wait until TC = 1
     USART2->DR = chr;
-
-    while (!(USART2->SR & (1U << 6))) {}   //wait until TC = 1
 }
 
-void USART2_send_string(uint8_t* string) {
-    while (*string) USART2_send_char(*string++);
+void USART2_transmit_string(uint8_t* string) {
+    while (*string) USART2_transmit_char(*string++);
 }
 
-uint8_t USART2_get_char(void) {
+uint8_t USART2_receive_char(void) {
     uint8_t tmp;
     while (!(USART2->SR & (1 << 5))) {}         //wait until rxne bit (read data register bit) is set (ready to be read)
     
