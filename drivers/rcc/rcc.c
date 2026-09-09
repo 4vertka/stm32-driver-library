@@ -100,6 +100,103 @@ void RCC_SysClock_Init(void) {
     RCC_set_sysclock(RCC_PLL_SYSCLOCK);
 }
 
+uint32_t RCC_get_AHB_clock_hz(void) {
+    uint8_t bits = (RCC->CFGR >> 4) & 0x0F;
+    uint32_t hz = RCC_Get_PLL_frequ() * 1000000;
+    switch (bits) {
+    case RCC_AHB_DIV2: {
+        hz /= 2;
+        break;
+    }
+    case RCC_AHB_DIV4: {
+        hz /= 4;
+        break;
+    }
+    case RCC_AHB_DIV8: {
+        hz /= 8;
+        break;
+    }
+    case RCC_AHB_DIV16: {
+        hz /= 16;
+        break;
+    } 
+    case RCC_AHB_DIV64: {
+        hz /=  64;
+        break;
+    }
+    case RCC_AHB_DIV128: {
+        hz /= 128;
+        break;
+    }
+    case RCC_AHB_DIV256: {
+        hz /= 256;
+        break;
+    }
+    case RCC_AHB_DIV512: {
+        hz /= 512;
+        break;
+    }
+    default: {break;}
+    }
+
+    return hz;
+}
+
+uint32_t RCC_get_APB1_clock_hz(void) {
+    uint8_t bits = (RCC->CFGR >> 10) & 0x07;
+    uint32_t hz = RCC_get_AHB_clock_hz();
+    switch (bits) {
+    case RCC_APB_DIV2: {
+        hz /= 2;
+        break;
+    }
+    case RCC_APB_DIV4: {
+        hz /= 4;
+        break;
+    }
+    case RCC_APB_DIV8: {
+        hz /= 8;
+        break;
+    }
+    case RCC_APB_DIV16: {
+        hz /= 16;
+        break;
+    }
+
+    default: {break;}
+    }
+
+    return hz;
+}
+
+uint32_t RCC_get_APB2_clock_hz(void) {
+    uint8_t bits = (RCC->CFGR >> 13) & 0x07;
+    
+    uint32_t hz = RCC_get_AHB_clock_hz();
+    switch (bits) {
+    case RCC_APB_DIV2: {
+        hz /= 2;
+        break;
+    }
+    case RCC_APB_DIV4: {
+        hz /= 4;
+        break;
+    }
+    case RCC_APB_DIV8: {
+        hz /= 8;
+        break;
+    }
+    case RCC_APB_DIV16: {
+        hz /= 16;
+        break;
+    }
+    default: {break;}
+    }
+
+    return hz;
+
+}
+
 uint32_t RCC_Get_PLL_frequ(void) {
     uint32_t PLL_clock_speed = 0;
     uint32_t PLL_src= 0;

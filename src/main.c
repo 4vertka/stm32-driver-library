@@ -22,13 +22,10 @@ int main(void) {
     USART2_config(&usart);
 
     while (1) {
-        USART2_transmit_char('b');
+        USART2_transmit_string("hello uart\n");
         SYSTICK_delay(1000);
-            
-        if (USART2->SR & (1 << 5)) {
-            uint8_t data = USART2->DR;
-        }
-    
+        
+        USART2_receive_char();
     }
 }
 

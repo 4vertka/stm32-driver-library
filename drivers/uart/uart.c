@@ -51,9 +51,11 @@ void USART2_config(USART_handle_t* USART_handle) {
     USART2->BRR |= (usart_div_mantissa << 4);
 
     */
-    uint32_t apb1_hsi_freq = 21000000;
+    //uint32_t apb1_hsi_freq = 21000000;
+    //uint32_t sysclock_hz = RCC_Get_PLL_frequ() * 1000000;
+    //uint32_t apb1_freq = sysclock_hz / 4;
     //uint32_t apb1_hsi_freq = //RCC_Get_PLL_frequ();
-    USART2->BRR = apb1_hsi_freq / USART_handle->USART_config.baud;
+    USART2->BRR = RCC_get_APB1_clock_hz() / USART_handle->USART_config.baud;
 
     //usart rx/tx enable 
     USART2->CR1 |= (1U << 2);       //receive enable
@@ -73,10 +75,9 @@ void USART2_transmit_string(uint8_t* string) {
 }
 
 uint8_t USART2_receive_char(void) {
-    uint8_t tmp;
-    while (!(USART2->SR & (1 << 5))) {}         //wait until rxne bit (read data register bit) is set (ready to be read)
-    
-    tmp = USART2->DR;                           //read the data from register, clear rxne bit
-    
-    return tmp;
+    while (USART2->SR & (1 << 5)) {
+        return USART2->DR;
+    }
+    return 0;
+ //wait until rxne bit (read data register bit) is set (ready to be read)
 }
