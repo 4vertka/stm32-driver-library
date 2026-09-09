@@ -73,7 +73,7 @@ typedef struct {
 
 #define RCC_DEFAULT_PLLM_VAL    (16)
 #define RCC_DEFAULT_PLLN_VAL    (336)
-#define RCC_DEFAULT_PLLP_VAL    (1)
+#define RCC_DEFAULT_PLLP_VAL    (0)
 
 #define RCC_AHB_DIV1            (1)
 #define RCC_AHB_DIV2            (8)

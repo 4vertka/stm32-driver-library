@@ -14,12 +14,12 @@ typedef struct {
 } USART_reg_t;
 
 typedef struct {
-    volatile uint32_t mode;
-    volatile uint32_t baud;
-    volatile uint32_t stop_bits;
-    volatile uint32_t word_length;
-    volatile uint32_t parity_bits;
-    volatile uint32_t hardware_flow_control;
+    volatile uint8_t mode;
+    volatile uint16_t baud;
+    volatile uint8_t stop_bits;
+    volatile uint8_t word_length;
+    volatile uint8_t parity_bits;
+    volatile uint8_t hardware_flow_control;
 } USART_config_t;
 
 typedef struct {
@@ -43,5 +43,11 @@ typedef struct {
 #define USART_2_STOP_BIT        (2)
 
 void USART2_config(USART_handle_t* USART_handle);
+
+void USART2_send_char(uint8_t chr); 
+void USART2_send_string(uint8_t* string);
+
+uint8_t USART2_get_char(void);
+
 
 #endif
