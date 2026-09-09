@@ -8,21 +8,32 @@
 
 // button pc 13
 
+volatile uint8_t rx_char;
+
 int main(void) {
 
-    RCC_SysClock_Init();
+    //RCC_SysClock_Init();
 
     SYSTICK_init(16000000, SYST_CLKSRC_INTERNAL, SYST_TICKINT_EXT, ENABLE);
 
     USART_handle_t usart;
     usart.USART_reg = USART2;
-    usart.USART_config.baud = 9600;
+    usart.USART_config.mode = USART_MODE_TXRX;
+    usart.USART_config.baud = USART_BAUD_RATE_9600;
     usart.USART_config.word_length = USART_8_DATA_BITS;
-
+    usart.USART_config.parity_bits = USART_PARITY_NO;
+    usart.USART_config.stop_bits = USART_STOP_BIT_1;
+    //USART2->CR1 |= (1U << 5);
+        
     USART2_config(&usart);
 
+
+    //GPIO_irq_exti_setup(3, GPIO_EXTI_FALLING_EDGE);
+    //GPIO_irq_set_priority(NVIC_IRQ_USART2, 2);
+    //GPIO_irq_enable(NVIC_IRQ_USART2);
+
     while (1) {
-        USART2_transmit_string("hello uart\n");
+        USART2_transmit_string("hello uart2\n");
         SYSTICK_delay(1000);
         
         USART2_receive_char();
@@ -143,7 +154,17 @@ void SPI2_IRQ_Handler(void) {}
 
 void USART1_IRQ_Handler(void) {}
 
-void USART2_IRQ_Handler(void) {}
+void USART2_IRQ_Handler(void) {
+    //check if the interrupt source is RXNE
+    if ((USART2->SR & (1U << 5))) {
+        rx_char = USART2->DR;
+        USART2_transmit_char(rx_char);
+        USART2_transmit_char('\r');
+        USART2_transmit_char('\n');
+        USART2->SR &= ~(1U << 5);
+    }
+
+}
 
 void EXTI15_10_IRQ_Handler() {
     if (EXTI->PR & (1 << GPIO_PIN_13)) {

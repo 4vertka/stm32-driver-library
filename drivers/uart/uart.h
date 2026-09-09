@@ -14,12 +14,13 @@ typedef struct {
 } USART_reg_t;
 
 typedef struct {
-    volatile uint8_t mode;
-    volatile uint16_t baud;
-    volatile uint8_t stop_bits;
-    volatile uint8_t word_length;
-    volatile uint8_t parity_bits;
-    volatile uint8_t hardware_flow_control;
+    uint8_t mode;
+    uint16_t baud;
+    uint8_t stop_bits;
+    uint8_t word_length;
+    uint8_t parity_bits;
+    uint8_t hardware_flow_control;
+
 } USART_config_t;
 
 typedef struct {
@@ -35,12 +36,31 @@ typedef struct {
 #define USART2                  ((USART_reg_t*) USART2_ADDR)
 #define USART6                  ((USART_reg_t*) USART6_ADDR)
 
+#define USART_MODE_TX           (0)
+#define USART_MODE_RX           (1)
+#define USART_MODE_TXRX         (2)
+
 #define USART_8_DATA_BITS       (0)
 #define USART_9_DATA_BITS       (1)
 
-#define USART_1_STOP_BIT        (0)
-#define USART_0x5_STOP_BIT      (1)
-#define USART_2_STOP_BIT        (2)
+#define USART_STOP_BIT_1        (0)
+#define USART_STOP_BIT_0x5      (1)
+#define USART_STOP_BIT_2        (2)
+#define USART_STOP_BIT_1x5      (3)
+
+#define USART_BAUD_RATE_9600    (9600)
+#define USART_BAUD_RATE_1200    (1200)
+#define USART_BAUD_RATE_115200  (115200)
+#define USART_BAUD_RATE_19200   (19200)
+
+#define USART_PARITY_ODD        (2)
+#define USART_PARITY_EVEN       (1)
+#define USART_PARITY_NO         (0)
+
+#define USART_HW_FLOW_CTRL_NO       (0)
+#define USART_HW_FLOW_CTRL_CTS      (1)
+#define USART_HW_FLOW_CTRL_RTS      (2)
+#define USART_HW_FLOW_CTRL_CTS_RTS  (3)
 
 void USART2_config(USART_handle_t* USART_handle);
 

@@ -101,8 +101,30 @@ void RCC_SysClock_Init(void) {
 }
 
 uint32_t RCC_get_AHB_clock_hz(void) {
+    uint32_t hz = 0; 
+    uint8_t sysclk_src = (RCC->CFGR >> 2) & 0x03;
+
+    switch (sysclk_src) {
+    case 0: {
+        hz = 16000000;
+        break;
+    }
+    case 1: {
+        hz = HSE_CLOCK_SPEED * 1000000;
+        break;
+    }
+    case 2: {
+        hz = RCC_Get_PLL_frequ() * 1000000;
+        break;
+    }
+    default: {
+        hz = 16000000;
+        break;
+    }
+    }
+    
     uint8_t bits = (RCC->CFGR >> 4) & 0x0F;
-    uint32_t hz = RCC_Get_PLL_frequ() * 1000000;
+
     switch (bits) {
     case RCC_AHB_DIV2: {
         hz /= 2;
