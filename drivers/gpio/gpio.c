@@ -189,6 +189,26 @@ void GPIO_USART2_TXRX_pins_enable(void) {
     GPIO_init(&GPIO_rx);
 }
 
+void GPIO_SPI_pins_enable(void) {
+    GPIO_clock(GPIOA, ENABLE);
+
+    GPIO_handle_t miso;                      //miso pin
+    miso.GPIO_reg = GPIOA;
+    miso.GPIO_config.pin = 6;
+    miso.GPIO_config.mode = GPIO_MODE_AF;
+    miso.GPIO_config.af = GPIO_AF5;
+    
+    GPIO_handle_t mosi;                      //mosi pin
+    mosi.GPIO_reg = GPIOA;
+    mosi.GPIO_config.pin = 7;
+    mosi.GPIO_config.mode = GPIO_MODE_AF;
+    mosi.GPIO_config.af = GPIO_AF5;
+    
+    GPIO_init(&miso);
+    GPIO_init(&mosi);
+
+}
+
 void GPIOA_bus_clock_enable(void) {
     RCC->AHB1ENR |= (1U << 0);
 }

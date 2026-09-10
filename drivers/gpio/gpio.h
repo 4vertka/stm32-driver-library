@@ -120,6 +120,8 @@ void GPIO_irq_disable(uint8_t irq_num);
 
 void GPIO_USART2_TXRX_pins_enable(void);
 
+void GPIO_SPI_pins_enable(void);
+
 void GPIOA_bus_clock_enable(void);
 void GPIOB_bus_clock_enable(void);
 void GPIOC_bus_clock_enable(void);
