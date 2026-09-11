@@ -203,9 +203,16 @@ void GPIO_SPI_pins_enable(void) {
     mosi.GPIO_config.pin = 7;
     mosi.GPIO_config.mode = GPIO_MODE_AF;
     mosi.GPIO_config.af = GPIO_AF5;
-    
+
+    GPIO_handle_t clk;
+    clk.GPIO_reg = GPIOA;
+    clk.GPIO_config.pin = 5;
+    clk.GPIO_config.mode = GPIO_MODE_AF;
+    clk.GPIO_config.af = GPIO_AF5;
+
     GPIO_init(&miso);
     GPIO_init(&mosi);
+    GPIO_init(&clk);
 
 }
 
