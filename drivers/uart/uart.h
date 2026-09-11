@@ -20,7 +20,7 @@ typedef struct {
     uint8_t word_length;
     uint8_t parity_bits;
     uint8_t hardware_flow_control;
-
+    
 } USART_config_t;
 
 typedef struct {
@@ -69,5 +69,9 @@ void USART2_transmit_string(uint8_t* string);
 
 uint8_t USART2_receive_char(void);
 
+void USART2_transmit_char_IT(uint8_t chr);
+uint8_t USART2_receive_char_IT(void);
+
+void USART2_config_interrupt(USART_handle_t* USART_handle);
 
 #endif

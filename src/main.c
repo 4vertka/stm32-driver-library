@@ -16,6 +16,7 @@ int main(void) {
 
     SYSTICK_init(16000000, SYST_CLKSRC_INTERNAL, SYST_TICKINT_EXT, ENABLE);
 
+    
     USART_handle_t usart;
     usart.USART_reg = USART2;
     usart.USART_config.mode = USART_MODE_TXRX;
@@ -24,19 +25,23 @@ int main(void) {
     usart.USART_config.parity_bits = USART_PARITY_NO;
     usart.USART_config.stop_bits = USART_STOP_BIT_1;
     //USART2->CR1 |= (1U << 5);
-        
+       
     USART2_config(&usart);
-
+    
+    USART2->CR1 |= (1U << 5);
+    GPIO_irq_enable(NVIC_IRQ_USART2);
 
     //GPIO_irq_exti_setup(3, GPIO_EXTI_FALLING_EDGE);
     //GPIO_irq_set_priority(NVIC_IRQ_USART2, 2);
     //GPIO_irq_enable(NVIC_IRQ_USART2);
 
     while (1) {
-        USART2_transmit_string("hello uart2\n");
-        SYSTICK_delay(1000);
+        //GPIO_toggle_ODR_pin(GPIOA, 5);
+        //for (volatile int i = 0; i < 1000000; i++); 
+        //USART2_transmit_string("hello uart2\n");
+        //SYSTICK_delay(1000);
         
-        USART2_receive_char();
+        //USART2_receive_char();
     }
 }
 
@@ -83,6 +88,7 @@ void PendSV_Handler(void) {}
 
 void Systick_Handler(void) {
     ++SYST_ticks;
+    GPIO_toggle_ODR_pin(GPIOA, 5);
 }
 
 void WWDG_IRQ_Handler(void) {}

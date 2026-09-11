@@ -49,6 +49,9 @@ void USART2_config(USART_handle_t* USART_handle) {
     }
 }
 
+void USART2_config_interrupt(USART_handle_t* USART_handle) {
+}
+
 void USART2_transmit_char(uint8_t chr) {
     //copy data in USART2->DR register and wait until TC = 1
 
@@ -56,8 +59,16 @@ void USART2_transmit_char(uint8_t chr) {
     USART2->DR = chr;
 }
 
+void USART2_transmit_char_IT(uint8_t chr) {
+
+}
+
 void USART2_transmit_string(uint8_t* string) {
     while (*string) USART2_transmit_char(*string++);
+}
+
+uint8_t USART2_receive_char_IT(void) {
+    
 }
 
 uint8_t USART2_receive_char(void) {
