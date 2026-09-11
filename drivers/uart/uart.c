@@ -77,3 +77,13 @@ uint8_t USART2_receive_char(void) {
     }
     return 0;
 }
+
+int32_t _write(int32_t handle, uint8_t* data, int32_t size) {
+    int32_t count = size;
+    while(count--) {
+        while (!(USART2->SR & (1U << 7))) {};
+        USART2->DR = *data++;
+    }
+
+    return size;
+}

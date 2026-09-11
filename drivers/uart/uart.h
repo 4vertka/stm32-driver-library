@@ -74,4 +74,6 @@ uint8_t USART2_receive_char_IT(void);
 
 void USART2_config_interrupt(USART_handle_t* USART_handle);
 
+int32_t _write(int32_t handle, uint8_t* data, int32_t size);
+
 #endif

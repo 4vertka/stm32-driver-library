@@ -4,15 +4,26 @@
 #include <stdint.h>
 #include <gpio.h>
 #include <generic.h>
-
+#include <ringbuffer.h>
 
 // button pc 13
 
 volatile uint8_t rx_char;
 
+#define RINGBUFFER_SIZE         (128)
+
+volatile char rb_buf[ RINGBUFFER_SIZE + 1 ];
+ring_buffer_t rb = {
+  len: RINGBUFFER_SIZE,
+  buf: rb_buf,
+  pos: 0,
+  ext: 0
+};
+volatile int newline = 0;
+
 int main(void) {
 
-    //RCC_SysClock_Init();
+    RCC_SysClock_Init();
 
     SYSTICK_init(16000000, SYST_CLKSRC_INTERNAL, SYST_TICKINT_EXT, ENABLE);
 
@@ -24,18 +35,17 @@ int main(void) {
     usart.USART_config.word_length = USART_8_DATA_BITS;
     usart.USART_config.parity_bits = USART_PARITY_NO;
     usart.USART_config.stop_bits = USART_STOP_BIT_1;
-    //USART2->CR1 |= (1U << 5);
        
     USART2_config(&usart);
     
     USART2->CR1 |= (1U << 5);
     GPIO_irq_enable(NVIC_IRQ_USART2);
 
-    //GPIO_irq_exti_setup(3, GPIO_EXTI_FALLING_EDGE);
-    //GPIO_irq_set_priority(NVIC_IRQ_USART2, 2);
-    //GPIO_irq_enable(NVIC_IRQ_USART2);
-
     while (1) {
+
+        while (rb.pos != rb.ext) {
+            USART2_transmit_char(ringbuf_read(&rb));
+        }
         //GPIO_toggle_ODR_pin(GPIOA, 5);
         //for (volatile int i = 0; i < 1000000; i++); 
         //USART2_transmit_string("hello uart2\n");
@@ -162,12 +172,18 @@ void USART1_IRQ_Handler(void) {}
 
 void USART2_IRQ_Handler(void) {
     //check if the interrupt source is RXNE
-    if ((USART2->SR & (1U << 5))) {
+    /*if ((USART2->SR & (1U << 5))) {
         rx_char = USART2->DR;
         USART2_transmit_char(rx_char);
         USART2_transmit_char('\r');
         USART2_transmit_char('\n');
         USART2->SR &= ~(1U << 5);
+    }*/ 
+
+    if (USART2->SR & (1U << 5)) {
+        uint8_t ch = USART2->DR;
+        ringbuf_write(rb, ch);
+        if (ch == '\r') newline = 1;
     }
 
 }
