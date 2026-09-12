@@ -73,6 +73,8 @@ typedef struct {
 void SPI_init(SPI_handle_t* SPI_handle);
 void SPI_deinit(SPI_reg_t* SPI_reg);
 
+void SPI1_enable_interrupt(SPI_reg_t* SPI_reg);
+
 void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t* data, uint32_t size);
 void SPI_receive(SPI_reg_t* SPI_reg, uint8_t* data, uint32_t size);
 

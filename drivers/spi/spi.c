@@ -48,6 +48,8 @@ void SPI_init(SPI_handle_t* SPI_handle) {
 
     if (SPI_handle->SPI_config.dma == SPI_DMA_DISABLE) 
         SPI_handle->SPI_reg->CR2 = 0;
+
+    SPI_handle->SPI_reg->CR1 |= (1U << 6);
 }
 
 void SPI_deinit(SPI_reg_t* SPI_reg) {
@@ -61,6 +63,11 @@ void SPI_deinit(SPI_reg_t* SPI_reg) {
 
     if (SPI_reg == SPI1) 
         RCC_SPI1_bus_clock_disable();                   //disable clock
+}
+
+void SPI1_enable_interrupt(SPI_reg_t* SPI_reg) {
+    SPI_reg->CR2 |= (1U << 6);                      //Enable RXNEIE
+    SPI_reg->CR2 |= (1U << 7);                      //Enable TXEIE
 }
 
 void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t *data, uint32_t size) {

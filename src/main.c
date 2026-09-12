@@ -40,7 +40,7 @@ int main(void) {
     GPIO_irq_enable(NVIC_IRQ_USART2);
 
     */
-    
+
     GPIO_SPI_pins_enable();
 
     SPI_handle_t spi;
@@ -52,9 +52,11 @@ int main(void) {
     spi.SPI_config.cpha = SPI_CPHA_HIGH;
     spi.SPI_config.ssm = SPI_SMM_ENABLE;
     spi.SPI_config.dff = SPI_DFF_BITS8;
-    spi.SPI_config.dma = SPI_DMA_DISABLE;
-
+    spi.SPI_config.dma = SPI_DMA_ENABLE;
+    
     SPI_init(&spi);
+    SPI1_enable_interrupt(SPI1);
+    GPIO_irq_enable(NVIC_IRQ_SPI1);
 
     while (1) {
         
@@ -185,7 +187,10 @@ void I2C2_EV_IRQ_Handler(void) {}
 
 void I2C2_ER_IRQ_Handler(void) {}
 
-void SPI1_IRQ_Handler(void) {}
+void SPI1_IRQ_Handler(void) {
+    int i = 0;
+
+}
 
 void SPI2_IRQ_Handler(void) {}
 
