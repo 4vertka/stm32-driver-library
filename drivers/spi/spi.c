@@ -50,7 +50,18 @@ void SPI_init(SPI_handle_t* SPI_handle) {
         SPI_handle->SPI_reg->CR2 = 0;
 }
 
-void SPI_deinit(SPI_reg_t* SPI_reg) {}
+void SPI_deinit(SPI_reg_t* SPI_reg) {
+    //wait until RXNE=1 
+    while (!((SPI_reg->SR) & (1U << 0))) {}
+    //wait until TXE=1
+    while (!((SPI_reg->SR)& (1U << 1))) {}
+    //wait until BSY=1 
+    while (((SPI_reg->SR) & (1U << 7))) {}              //wait for BSY bit to reset
+    SPI_reg->CR1 &= ~(1U << 6);                         //disable spi (SPE)
+
+    if (SPI_reg == SPI1) 
+        RCC_SPI1_bus_clock_disable();                   //disable clock
+}
 
 void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t *data, uint32_t size) {
     int i = 0;

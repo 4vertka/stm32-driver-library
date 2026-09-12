@@ -121,6 +121,7 @@ uint32_t RCC_Get_PLL_frequ(void);
 
 void RCC_USART2_bus_clock_enable(void);
 void RCC_SPI1_bus_clock_enable(void);
+void RCC_SPI1_bus_clock_disable(void);
 
 
 uint32_t RCC_get_AHB_clock_hz(void);

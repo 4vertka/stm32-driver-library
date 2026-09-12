@@ -260,6 +260,10 @@ void RCC_SPI1_bus_clock_enable(void) {
     RCC->APB2ENR |= (1U << 12);
 }
 
+void RCC_SPI1_bus_clock_disable(void) {
+    RCC->APB2ENR &= ~(1U << 12);
+}
+
 void RCC_MCO1(uint8_t clock, uint8_t div) {
     // MCO1 = PA8
     GPIO_handle_t GPIO_MCO1;

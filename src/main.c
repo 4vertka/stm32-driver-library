@@ -40,7 +40,9 @@ int main(void) {
     GPIO_irq_enable(NVIC_IRQ_USART2);
 
     */
-        
+    
+    GPIO_SPI_pins_enable();
+
     SPI_handle_t spi;
     spi.SPI_reg = SPI1;
     spi.SPI_config.mode = SPI_MODE_MASTER;
