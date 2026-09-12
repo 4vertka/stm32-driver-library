@@ -1,24 +1,15 @@
+#include "rcc.h"
 #include <spi.h>
 
-void SPI1_config(void) {
-    //slave management (software)
-    SPI1->CR1 |= (1U << 9);
-    SPI1->CR1 |= (1U << 8);
-
-    //set spi as master 
-    SPI1->CR1 |= (1U << 2);
-
-    //enable spi 
-    SPI1->CR1 |= (1U << 6);
-}
-
-void SPI_transmit_char(uint8_t ch) {
-    while (!(SPI1->SR & (1U << 1))) {}          // check if TXE (tranmit buffer is empty)
-    SPI1->DR = ch;
-    while (!(SPI1->SR & (1U << 7))) {}          //wait until bus is free
-}
+/* Turn on SPI clock
+ * Configure CR1 register
+ * Configure CR2 register 
+*/
 
 void SPI_init(SPI_handle_t* SPI_handle) {
+    if (SPI_handle->SPI_reg == SPI1) 
+        RCC_SPI1_bus_clock_enable();
+
     SPI_handle->SPI_reg->CR1 = 0;
 
     //mode 
@@ -38,6 +29,9 @@ void SPI_init(SPI_handle_t* SPI_handle) {
     //clock speed
     SPI_handle->SPI_reg->CR1 |= (SPI_handle->SPI_config.clock_speed << 3);
 
+    //MSB first
+    SPI_handle->SPI_reg->CR1 &= ~(1U << 7);
+
     //dff 
     SPI_handle->SPI_reg->CR1 |= (SPI_handle->SPI_config.dff << 11);
 
@@ -49,34 +43,38 @@ void SPI_init(SPI_handle_t* SPI_handle) {
 
     //ssm 
     SPI_handle->SPI_reg->CR1 |= (SPI_handle->SPI_config.ssm << 9);
+    if (SPI_handle->SPI_config.ssm == SPI_SMM_ENABLE) 
+        SPI_handle->SPI_reg->CR1 |= (1U << 8);
+
+    if (SPI_handle->SPI_config.dma == SPI_DMA_DISABLE) 
+        SPI_handle->SPI_reg->CR2 = 0;
 }
 
 void SPI_deinit(SPI_reg_t* SPI_reg) {}
 
-void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t *TXbuffer, uint32_t size) {
-
-    while (size > 0) {
-        while (!(SPI_reg->SR & (1U << 1))) {}          // check if TXE (tranmit buffer is empty)
-        // check if dff bit is 8-bit or 16-bit mode
-        if (SPI_reg->CR1 & (1U << 11)) {
-            SPI_reg->DR = *((uint16_t*)TXbuffer);
-            size -= 2;
-            (uint16_t*)TXbuffer++;
-        }else {
-            SPI_reg->DR = *TXbuffer;
-            size--;
-            TXbuffer++;
-        }
-        
-        //while (!(SPI1->SR & (1U << 7))) {}             // wait until bus is free 
+void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t *data, uint32_t size) {
+    int i = 0;
+    while (i < size) {
+        while (!((SPI_reg->SR) & (1U << 1))) {}             //wait for TXE bit until TX buffer is empty
+        SPI1->DR = data[i];
+        i++;
     }
 
+    while (!((SPI_reg->SR) & (1U << 1))) {}
+    while (!((SPI_reg->SR) & (1U << 7))) {}                  //check if SPI is not busy
+
+    //Clear the Overrun flag by reading DR and SR
+    uint8_t tmp = SPI_reg->DR;
+    tmp = SPI_reg->SR;
 }
 
-void SPI_receive(SPI_reg_t *SPI_reg) {}
+void SPI_receive(SPI_reg_t *SPI_reg, uint8_t* data, uint32_t size) {
+    while (size) {
+        while (((SPI_reg->SR) & (1U << 7))) {}              //wait for BSY bit to reset
+        SPI_reg->DR = 0;                                    //dummy data
+        while (!((SPI_reg->SR) & (1U << 0))) {}
+        *data++ = (SPI_reg->DR);
+        size--;
+    }
+}
 
-void SPI_irq_exti_setup(uint8_t pin, uint8_t mode) {}
-
-void SPI_irq_set_priority(uint8_t irq_num, uint8_t priority) {}
-
-void SPI_irq_enable(uint8_t irq_num) {}

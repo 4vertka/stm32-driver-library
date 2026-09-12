@@ -1,4 +1,5 @@
 #include "rcc.h"
+#include "spi/spi.h"
 #include "systick/systick.h"
 #include "uart.h"
 #include <stdint.h>
@@ -10,11 +11,9 @@
 
 volatile uint8_t rx_char;
 
-#define RINGBUFFER_SIZE         (128)
-
-volatile char rb_buf[ RINGBUFFER_SIZE + 1 ];
+volatile char rb_buf[ RING_BUFFER_SIZE + 1 ];
 ring_buffer_t rb = {
-  len: RINGBUFFER_SIZE,
+  len: RING_BUFFER_SIZE,
   buf: rb_buf,
   pos: 0,
   ext: 0
@@ -23,10 +22,9 @@ volatile int newline = 0;
 
 int main(void) {
 
-    RCC_SysClock_Init();
+    /*RCC_SysClock_Init();
 
     SYSTICK_init(16000000, SYST_CLKSRC_INTERNAL, SYST_TICKINT_EXT, ENABLE);
-
     
     USART_handle_t usart;
     usart.USART_reg = USART2;
@@ -41,11 +39,32 @@ int main(void) {
     USART2->CR1 |= (1U << 5);
     GPIO_irq_enable(NVIC_IRQ_USART2);
 
-    while (1) {
+    */
+        
+    SPI_handle_t spi;
+    spi.SPI_reg = SPI1;
+    spi.SPI_config.mode = SPI_MODE_MASTER;
+    spi.SPI_config.clock_speed = SPI_CLOCK_SPEED_DIV16;
+    spi.SPI_config.bus_cfg =  SPI_BUS_FULL_DUPLEX;
+    spi.SPI_config.cpol = SPI_CPOL_HIGH;
+    spi.SPI_config.cpha = SPI_CPHA_HIGH;
+    spi.SPI_config.ssm = SPI_SMM_ENABLE;
+    spi.SPI_config.dff = SPI_DFF_BITS8;
+    spi.SPI_config.dma = SPI_DMA_DISABLE;
 
-        while (rb.pos != rb.ext) {
+    SPI_init(&spi);
+
+    while (1) {
+        
+
+        /*while (rb.pos != rb.ext) {
             USART2_transmit_char(ringbuf_read(&rb));
         }
+        if (newline == 1) {
+            USART2_transmit_char('\r');
+            USART2_transmit_char('\n');
+            newline = 0;
+        }*/
         //GPIO_toggle_ODR_pin(GPIOA, 5);
         //for (volatile int i = 0; i < 1000000; i++); 
         //USART2_transmit_string("hello uart2\n");

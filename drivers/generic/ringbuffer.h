@@ -10,6 +10,8 @@ typedef struct {
     volatile int32_t ext;
 } ring_buffer_t;
 
+#define RING_BUFFER_SIZE            (128)
+
 // macro to write to a buffer
 #define ringbuf_write( rb, x ) \
   rb.buf[ rb.ext ] = x; \

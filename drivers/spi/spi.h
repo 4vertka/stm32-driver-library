@@ -5,6 +5,7 @@
 
 typedef struct {
     volatile uint32_t CR1;
+    volatile uint32_t CR2;
     volatile uint32_t SR;
     volatile uint32_t DR;
     volatile uint32_t CRCPR;
@@ -22,6 +23,7 @@ typedef struct {
     uint8_t cpol;
     uint8_t cpha;
     uint8_t ssm;
+    uint8_t dma;
 } SPI_config_t;
 
 typedef struct {
@@ -62,22 +64,16 @@ typedef struct {
 #define SPI_CPHA_LOW            (0)
 #define SPI_CPHA_HIGH           (1)
 
-#define SPI_SMM_DISABLE        (0)
-#define SPI_SMM_ENABLE         (1)
+#define SPI_SMM_DISABLE         (0)
+#define SPI_SMM_ENABLE          (1)
 
+#define SPI_DMA_DISABLE         (0)
+#define SPI_DMA_ENABLE          (1)
 
 void SPI_init(SPI_handle_t* SPI_handle);
 void SPI_deinit(SPI_reg_t* SPI_reg);
 
-void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t* TXbuffer, uint32_t size);
-void SPI_receive(SPI_reg_t* SPI_reg);
-
-void SPI_irq_exti_setup(uint8_t pin, uint8_t mode);
-void SPI_irq_set_priority(uint8_t irq_num, uint8_t priority);
-void SPI_irq_enable(uint8_t irq_num);
-
-void SPI1_config(void);
-void SPI_transmit_char(uint8_t ch);
-uint8_t SPI_receive_char(void);
+void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t* data, uint32_t size);
+void SPI_receive(SPI_reg_t* SPI_reg, uint8_t* data, uint32_t size);
 
 #endif
