@@ -30,6 +30,7 @@ typedef struct {
 
 typedef struct {
     uint32_t reload;
+    uint8_t interrupt;
 } TIM2_TIM5_conf_t;
 
 typedef struct {

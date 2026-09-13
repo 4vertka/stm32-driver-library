@@ -17,7 +17,8 @@ int main(void) {
 
     TIM2_TIM5_handle_t tim;
     tim.TIM2_TIM5_reg = TIM2;
-    tim.TIM2_TIM5_conf.reload = 1000;
+    tim.TIM2_TIM5_conf.reload = 16000;
+    tim.TIM2_TIM5_conf.interrupt = ENABLE;
 
     TIM2_TIM5_init(&tim);
 
@@ -32,8 +33,10 @@ int main(void) {
 
     GPIO_init(&led);
 
+    GPIO_irq_enable(NVIC_IRQ_TIM2);
+        
     while (1) {
-        GPIO_toggle_ODR_pin(led.GPIO_reg, led.GPIO_config.pin);
-        TIM_delay(tim.TIM2_TIM5_reg, 1000);
+        //GPIO_toggle_ODR_pin(led.GPIO_reg, led.GPIO_config.pin);
+        //TIM_delay(tim.TIM2_TIM5_reg, 1000);
     }
 }

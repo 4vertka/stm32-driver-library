@@ -121,6 +121,12 @@ typedef struct {
 #define NVIC_IRQ_USART2         (38)
 #define NVIC_IRQ_SPI1           (35)
 
+#define NVIC_IRQ_TIM2           (28)
+#define NVIC_IRQ_TIM3           (29)
+#define NVIC_IRQ_TIM4           (30)
+#define NVIC_IRQ_TIM5           (50)
+
+
 void SYSCFG_bus_clock_enable(void);
 
 #endif

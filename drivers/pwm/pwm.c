@@ -1,10 +1,17 @@
 #include <pwm.h>
 #include <rcc.h>
+#include <generic.h>
 
 void TIM2_TIM5_init(TIM2_TIM5_handle_t* tim) {
     //enable the bus clock for tim
     if (tim->TIM2_TIM5_reg == TIM2) 
         RCC_TIM2_bus_clock_enable();
+    else if (tim->TIM2_TIM5_reg == TIM3)
+        RCC_TIM3_bus_clock_enable();
+    else if (tim->TIM2_TIM5_reg == TIM4)
+        RCC_TIM4_bus_clock_enable();
+    else if (tim->TIM2_TIM5_reg == TIM5)
+        RCC_TIM5_bus_clock_enable();
 
     //formula for prescaler Required freq = CLK / (PSC + 1)
     uint16_t clock_freq = RCC_get_APB1_clock_hz() / 1000000;
@@ -14,6 +21,11 @@ void TIM2_TIM5_init(TIM2_TIM5_handle_t* tim) {
     //set reload value
     tim->TIM2_TIM5_reg->ARR = tim->TIM2_TIM5_conf.reload;
 
+    if (tim->TIM2_TIM5_conf.interrupt == ENABLE) 
+        tim->TIM2_TIM5_reg->DIER |= (1U << 0);
+    else
+        tim->TIM2_TIM5_reg->DIER &= ~(1U << 0);
+        
     //enable tim 
     tim->TIM2_TIM5_reg->CR1 |= (1U << 0);
 

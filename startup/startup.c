@@ -3,10 +3,13 @@
 #include <gpio.h>
 #include <systick.h>
 #include <uart.h>
+#include <pwm.h>
+
 
 int main(void);
 
 volatile uint8_t rx_char;
+static volatile uint8_t led_on = 0;
 
 volatile char rb_buf[ RING_BUFFER_SIZE + 1 ];
 ring_buffer_t rb = {
@@ -112,9 +115,33 @@ void TIM1_TRG_COM_TIM11_IRQ_Handler(void) {}
 
 void TIM1_CC_IRQ_Handler(void) {}
 
-void TIM2_IRQ_Handler(void) {}
+void TIM2_IRQ_Handler(void) {
+    if (TIM2->SR & (1U << 0)) {
+        led_on = !led_on;
+        if (led_on)
+            GPIO_write_ODR_pin(GPIOA, 5, ENABLE);
+        else
+            GPIO_write_ODR_pin(GPIOA, 5, DISABLE);
 
-void TIM3_IRQ_Handler(void) {}
+        TIM2->SR &= ~(1U << 0);
+    }
+    
+
+
+}
+
+void TIM3_IRQ_Handler(void) {
+    if (TIM3->SR & (1U << 0)) {
+        led_on = !led_on;
+        if (led_on)
+            GPIO_write_ODR_pin(GPIOA, 5, ENABLE);
+        else 
+            GPIO_write_ODR_pin(GPIOA, 5, DISABLE);
+
+
+        TIM3->SR &= ~(1U << 0);
+    }
+}
 
 void TIM4_IRQ_Handler(void) {}
 
