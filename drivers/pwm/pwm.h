@@ -26,8 +26,16 @@ typedef struct {
     volatile uint32_t DMAR;
     volatile uint32_t TIM2_OR;
     volatile uint32_t TIM5_OR;
-     
 } TIM2_TIM5_reg_t;
+
+typedef struct {
+    uint32_t reload;
+} TIM2_TIM5_conf_t;
+
+typedef struct {
+    TIM2_TIM5_reg_t* TIM2_TIM5_reg;
+    TIM2_TIM5_conf_t TIM2_TIM5_conf;
+} TIM2_TIM5_handle_t;
 
 #define TIM2_ADDR               (0x40000000U)
 #define TIM3_ADDR               (0x40000400U)
@@ -38,5 +46,9 @@ typedef struct {
 #define TIM3                    ((TIM2_TIM5_reg_t*) TIM3_ADDR)
 #define TIM4                    ((TIM2_TIM5_reg_t*) TIM4_ADDR)
 #define TIM5                    ((TIM2_TIM5_reg_t*) TIM5_ADDR)
+
+void TIM2_TIM5_init(TIM2_TIM5_handle_t* tim);
+
+void TIM_delay(TIM2_TIM5_reg_t* tim, uint32_t ms);
 
 #endif
