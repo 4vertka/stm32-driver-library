@@ -133,7 +133,17 @@ void RCC_I2C2_bus_clock_disable(void);
 void RCC_I2C3_bus_clock_enable(void);
 void RCC_I2C3_bus_clock_disable(void);
 
+void RCC_TIM2_bus_clock_enable(void);
+void RCC_TIM2_bus_clock_disable(void);
 
+void RCC_TIM3_bus_clock_enable(void);
+void RCC_TIM3_bus_clock_disable(void);
+
+void RCC_TIM4_bus_clock_enable(void);
+void RCC_TIM4_bus_clock_disable(void);
+
+void RCC_TIM5_bus_clock_enable(void);
+void RCC_TIM5_bus_clock_disable(void);
 
 uint32_t RCC_get_AHB_clock_hz(void);
 uint32_t RCC_get_APB1_clock_hz(void);

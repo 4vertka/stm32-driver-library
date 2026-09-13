@@ -286,6 +286,17 @@ void RCC_I2C3_bus_clock_disable(void) {
     RCC->APB1ENR &= ~(1U << 23);
 }
 
+void RCC_TIM2_bus_clock_enable(void) { RCC->APB1ENR |= (1U << 0);  }
+void RCC_TIM2_bus_clock_disable(void) { RCC->APB1ENR &= ~(1U << 0); }
+
+void RCC_TIM3_bus_clock_enable(void) { RCC->APB1ENR |= (1U << 1); }
+void RCC_TIM3_bus_clock_disable(void) { RCC->APB1ENR &= ~(1U << 1); }
+
+void RCC_TIM4_bus_clock_enable(void) { RCC->APB1ENR |= (1U << 2); }
+void RCC_TIM4_bus_clock_disable(void) { RCC->APB1ENR &= ~(1U << 2); }
+
+void RCC_TIM5_bus_clock_enable(void) { RCC->APB1ENR |= (1U << 3);}
+void RCC_TIM5_bus_clock_disable(void) { RCC->APB1ENR &= ~(1U << 0); }
 
 void RCC_MCO1(uint8_t clock, uint8_t div) {
     // MCO1 = PA8
