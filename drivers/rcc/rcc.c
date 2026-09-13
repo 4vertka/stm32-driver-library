@@ -264,6 +264,29 @@ void RCC_SPI1_bus_clock_disable(void) {
     RCC->APB2ENR &= ~(1U << 12);
 }
 
+void RCC_I2C1_bus_clock_enable(void) {
+    RCC->APB1ENR |= (1U << 21);
+}
+
+void RCC_I2C1_bus_clock_disable(void) {
+    RCC->APB1ENR &= ~(1U << 21);
+}
+
+void RCC_I2C2_bus_clock_enable(void) {
+    RCC->APB1ENR |= (1U << 22);
+}
+void RCC_I2C2_bus_clock_disable(void) {
+    RCC->APB1ENR &= ~(1U << 22);
+}
+
+void RCC_I2C3_bus_clock_enable(void) {
+    RCC->APB1ENR |= (1U << 23);
+}
+void RCC_I2C3_bus_clock_disable(void) {
+    RCC->APB1ENR &= ~(1U << 23);
+}
+
+
 void RCC_MCO1(uint8_t clock, uint8_t div) {
     // MCO1 = PA8
     GPIO_handle_t GPIO_MCO1;
