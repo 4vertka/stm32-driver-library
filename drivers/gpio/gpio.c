@@ -162,6 +162,30 @@ void GPIO_irq_disable(uint8_t irq_num) {
         *NVIC_ICER2 |= (1U << (irq_num % 32));
 }
 
+
+void GPIO_I2C_pins_enable(void) {
+    GPIO_clock(GPIOB, ENABLE);
+
+    GPIO_handle_t sda;
+    sda.GPIO_reg = GPIOB;
+    sda.GPIO_config.pin = 7;
+    sda.GPIO_config.mode = GPIO_MODE_AF;
+    sda.GPIO_config.af = GPIO_AF4;
+    sda.GPIO_config.otyper = GPIO_OPEN_DRAIN; 
+    sda.GPIO_config.speed = GPIO_SPEED_HIGH;
+
+    GPIO_handle_t scl;
+    scl.GPIO_reg = GPIOB;
+    scl.GPIO_config.pin = 6;
+    scl.GPIO_config.mode = GPIO_MODE_AF;
+    scl.GPIO_config.af = GPIO_AF4;
+    scl.GPIO_config.otyper = GPIO_OPEN_DRAIN; 
+    scl.GPIO_config.speed = GPIO_SPEED_HIGH;
+
+    GPIO_init(&sda);
+    GPIO_init(&scl);
+}
+
 void GPIO_USART2_TXRX_pins_enable(void) {
 
     GPIO_clock(GPIOA, ENABLE);

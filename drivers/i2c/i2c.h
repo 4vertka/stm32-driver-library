@@ -46,10 +46,13 @@ typedef struct {
 #define I2C_FM_DUTY_2           (0)
 #define I2C_FM_DUTY_16DIV9      (1)
 
+#define I2C_CLOCK_PIN           (6)
+#define I2C_DATA_PIN            (7)
+
 void I2C_init(I2C_handle_t* I2C_handle);
 void I2C_deinit(I2C_reg_t* I2C_reg);
 
-void I2C_transmit(I2C_reg_t* I2C_reg, uint8_t* buffer, uint32_t size);
-void I2C_receive(I2C_reg_t* I2C_reg, uint8_t* buffer, uint32_t size);
+void I2C_transmit(I2C_reg_t* I2C_reg,uint8_t address, uint8_t* buffer, uint32_t size);
+void I2C_receive(I2C_reg_t* I2C_reg, uint8_t address, uint8_t* buffer, uint32_t size);
 
 #endif
