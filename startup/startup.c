@@ -4,7 +4,7 @@
 #include <systick.h>
 #include <uart.h>
 #include <pwm.h>
-
+#include <exti.h>
 
 int main(void);
 

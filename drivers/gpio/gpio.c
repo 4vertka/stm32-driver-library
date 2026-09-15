@@ -1,6 +1,7 @@
 #include <gpio.h>
 #include <rcc.h>
 #include <generic.h>
+#include <exti.h>
 
 GPIO_reg_t* const GPIOA_dbg = GPIOA;
 GPIO_reg_t* const GPIOB_dbg = GPIOB;
@@ -133,7 +134,7 @@ void GPIO_irq_exti_setup(uint8_t pin, uint8_t mode) {
         EXTI->FTSR &= ~(1U << pin);
     }
 }
-
+/*
 void GPIO_irq_set_priority(uint8_t irq_number, uint8_t priority) {
     uint8_t pr_reg = irq_number/4;
     uint8_t pr_irq_num = irq_number%4;
@@ -161,7 +162,7 @@ void GPIO_irq_disable(uint8_t irq_num) {
     else if (irq_num >= 64 && irq_num < 96)
         *NVIC_ICER2 |= (1U << (irq_num % 32));
 }
-
+*/
 
 void GPIO_I2C_pins_enable(void) {
     GPIO_clock(GPIOB, ENABLE);

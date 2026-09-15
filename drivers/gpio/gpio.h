@@ -113,10 +113,10 @@ void GPIO_write_ODR_port(GPIO_reg_t* GPIO_reg, uint16_t value);
 void GPIO_toggle_ODR_pin(GPIO_reg_t* GPIO_reg, uint8_t pin);
 
 void GPIO_irq_exti_setup(uint8_t pin, uint8_t mode);
-void GPIO_irq_set_priority(uint8_t irq_number, uint8_t priority);
+//void GPIO_irq_set_priority(uint8_t irq_number, uint8_t priority);
 
-void GPIO_irq_enable(uint8_t irq_num);
-void GPIO_irq_disable(uint8_t irq_num);
+//void GPIO_irq_enable(uint8_t irq_num);
+//void GPIO_irq_disable(uint8_t irq_num);
 
 void GPIO_USART2_TXRX_pins_enable(void);
 

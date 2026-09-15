@@ -8,6 +8,7 @@
 #include <generic.h>
 #include <ringbuffer.h>
 #include <pwm.h>
+#include <exti.h>
 
 // button pc 13
 
@@ -33,7 +34,7 @@ int main(void) {
 
     GPIO_init(&led);
 
-    GPIO_irq_enable(NVIC_IRQ_TIM2);
+    irq_enable(NVIC_IRQ_TIM2);
         
     while (1) {
         //GPIO_toggle_ODR_pin(led.GPIO_reg, led.GPIO_config.pin);
