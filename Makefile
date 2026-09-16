@@ -14,6 +14,8 @@ LINKER_FLAGS = -nostdlib -T$(LINKER_SCRIPT)
 
 TARGET = main.elf
 BIN = main.bin
+LIB = stm32-driver-lib.a
+
 
 MAIN_SRC = $(SRC_DIR)/main.c
 DRIVERS_SRC = $(shell find $(DRIVERS_DIR) -name '*.c')
@@ -52,6 +54,11 @@ debug: $(BUILD_DIR)/$(TARGET)
 connect: $(BUILD_DIR)/$(TARGET)
 	gdb-multiarch $<
 
+$(LIB): $(OBJECT_FILES)
+	ar rcs $@ $i
+
+lib: $(LIB)
+
 clean:
-	rm -rf $(BUILD_DIR) $(shell find $(DRIVERS_DIR) -name '*.o') $(STARTUP_DIR)/*.o $(SRC_DIR)/*.o ./*.map
+	rm -rf $(BUILD_DIR) $(shell find $(DRIVERS_DIR) -name '*.o') $(STARTUP_DIR)/*.o $(SRC_DIR)/*.o ./*.map $(LIB)
 
