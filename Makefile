@@ -14,7 +14,7 @@ LINKER_FLAGS = -nostdlib -T$(LINKER_SCRIPT)
 
 TARGET = main.elf
 BIN = main.bin
-LIB = stm32-driver-lib.a
+LIB = libstm32driver.a
 
 
 MAIN_SRC = $(SRC_DIR)/main.c
