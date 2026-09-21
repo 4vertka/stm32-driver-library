@@ -207,6 +207,17 @@ void SYSTICK_init(uint32_t ticks, uint8_t clk_src, uint8_t ext, uint8_t enable_c
 void SYSTICK_delay(uint32_t tick);
 ```
 
+## Building Examples
+#### Build all examples of drivers in build/examples 
+```
+make examples
+```
+#### Flash each example 
+```
+// GPIO
+make flash-example-gpio
+```
+
 ## Memory map of MCU (can be viewed in link.ld)
 1. Flash
     - Start Addr:     0x08000000
