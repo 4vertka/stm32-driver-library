@@ -41,15 +41,15 @@ SYSTICK - milisecond delay, tick counter
 
 ## Prerequisites
 To build this project you need to install the following packages
-### Ubuntu/Debian:
+#### Ubuntu/Debian
 ```
 sudo apt install gcc-arm-none-eabi binutils-arm-none-eabi stlink-tools openocd gdb-multiarch make
 ```
-### Arch linux:
+#### Arch linux
 ```
 sudo pacman -S arm-none-eabi-gcc arm-none-eabi-binutils stlink openocd gdb make
 ```
-### MacOS:
+#### MacOS
 ```
 brew install arm-none-eabi-gcc stlink openocd make
 ```
