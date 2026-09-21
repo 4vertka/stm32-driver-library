@@ -210,10 +210,12 @@ void SYSTICK_delay(uint32_t tick);
 ```
 
 ## Memory map of MCU (can be viewed in link.ld)
-| Region  | Start     | Size  |
-|-----------------------------|
-| Flash   |0x08000000 |512K   |
-| SRAM    |0x20000000 |96K    |
+1. Flash
+    - Start Addr:     0x08000000
+    - Size:           512K
+2. SRAM
+    - Start addr:     0x20000000
+    - Size:           96K
 __
 ## Reference 
 - STM32 RM0008 Reference Manual
