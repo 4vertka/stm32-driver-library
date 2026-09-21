@@ -81,4 +81,6 @@ void irq_set_priority(uint8_t irq_number, uint8_t priority);
 void irq_enable(uint8_t irq_num);
 void irq_disable(uint8_t irq_num);
 
+void EXTI_clear_pending(uint8_t pin);
+
 #endif

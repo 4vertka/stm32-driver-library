@@ -63,7 +63,6 @@ void PendSV_Handler(void) {}
 
 void Systick_Handler(void) {
     ++SYST_ticks;
-    GPIO_toggle_ODR_pin(GPIOA, 5);
 }
 
 void WWDG_IRQ_Handler(void) {}

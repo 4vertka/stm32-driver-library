@@ -29,3 +29,7 @@ void irq_disable(uint8_t irq_num) {
     else if (irq_num >= 64 && irq_num < 96)
         *NVIC_ICER2 |= (1U << (irq_num % 32));
 }
+
+void EXTI_clear_pending(uint8_t pin) {
+    EXTI->PR |= (1U << pin);
+}
