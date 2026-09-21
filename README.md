@@ -1,4 +1,4 @@
-#STM32 Bare-Metal Driver Library
+# STM32 Bare-Metal Driver Library
 
 > Bare-metal peripheral driver library for STM32F401RE
 > Written in C without HAL, CubeMX, CMSIS dependencies
@@ -216,7 +216,6 @@ void SYSTICK_delay(uint32_t tick);
 2. SRAM
     - Start addr:     0x20000000
     - Size:           96K
-__
 ## Reference 
 - STM32 RM0008 Reference Manual
 - Cortex -M4 Devices Generic User Guide
