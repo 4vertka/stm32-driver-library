@@ -24,7 +24,7 @@ COMMON_OBJ = $(patsubst %.c,$(OBJ_DIR)/%.o,$(COMMON_SRC))
 MAIN_SRC = $(SRC_DIR)/main.c
 MAIN_OBJ = $(patsubst %.c,$(OBJ_DIR)/%.o,$(MAIN_SRC))
 
-EXAMPLE_SRCS = $(wildcard $(EXAMPLES_DIR)/*.c) 
+EXAMPLE_SRCS = $(wildcard $(EXAMPLE_DIR)/*.c) 
 EXAMPLE_NAMES = $(basename $(notdir $(EXAMPLE_SRCS)))
 
 # Generic build rule
@@ -41,10 +41,23 @@ $(BUILD_DIR)/main.elf: $(MAIN_OBJ) $(COMMON_OBJ)
 $(BUILD_DIR)/main.bin: $(BUILD_DIR)/main.elf
 	$(OBJCOPY) -O binary $< $@
 
-flash: $(BUILD_DIR)/$(BIN)
+# ------------------------------ examples --------------------------------------
+$(BUILD_DIR)/examples/%.elf: $(OBJ_DIR)/$(EXAMPLE_DIR)/%.o $(COMMON_OBJ)
+	@mkdir -p $(BUILD_DIR)/examples 
+	$(CC) $(CFLAGS) -Xlinker -Map=$(BUILD_DIR)/examples/$*.map $(LINKER_FLAGS) -o $@ $^ -lgcc 
+
+$(BUILD_DIR)/examples/%.bin: $(BUILD_DIR)/examples/%.elf 
+	$(OBJCOPY) -O binary $< $@
+
+examples: $(foreach ex,$(EXAMPLE_NAMES),$(BUILD_DIR)/examples/$(ex).bin)
+# ------------------------------------------------------------------------------
+flash: $(BUILD_DIR)/main.bin
 	st-flash --reset write $< 0x08000000
 
-debug: $(BUILD_DIR)/$(TARGET)
+flash-example-%: $(BUILD_DIR)/examples/%.bin	
+	st-flash --reset write $< 0x08000000
+
+debug: $(BUILD_DIR)/main.elf
 	openocd -f board/st_nucleo_f4.cfg \
 	-c "reset_config srst_only srst_nogate connect_assert_srst" \
 	-c "init" \
@@ -52,11 +65,19 @@ debug: $(BUILD_DIR)/$(TARGET)
 	-c "program $< verify" \
 	-c "reset halt"
 
-connect: $(BUILD_DIR)/$(TARGET)
+debug-example-%: $(BUILD_DIR)/examples/%.elf
+	openocd -f board/st_nucleo_f4.cfg \
+	-c "reset_config srst_only srst_nogate connect_assert_srst" \
+	-c "init" \
+	-c "reset halt" \
+	-c "program $< verify" \
+	-c "reset halt"
+
+connect: $(BUILD_DIR)/main.elf
 	gdb-multiarch $<
 
-$(LIB): $(OBJECT_FILES)
-	ar rcs $@ $i
+connect-example-%: $(BUILD_DIR)/examples/%.elf 
+	gdb-multiarch $<
 
 clean:
 	rm -rf $(BUILD_DIR)
