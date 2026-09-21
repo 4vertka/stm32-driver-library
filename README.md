@@ -2,7 +2,6 @@
 
 > Bare-metal peripheral driver library for STM32F401RE
 > Written in C without HAL, CubeMX, CMSIS dependencies
-> All drivers operate on register level
 
 ## Hardware
 - Board: STM32F401RE NUCLEO
@@ -29,15 +28,14 @@ link.ld
 ```  
 
 ## Drivers implemented
-
-RCC     - HSI/HSE/PLL config, clock getter functions, MCO
-GPIO    - Input/Output/AF/Analog, EXTI setup
-UART    - TX/RX polling
-SPI     - Full/Half duplex, TX/RX polling
-I2C     - Master TX/RX, Standard mode
-TIM     - Basic timer, delay
-EXTI    - NVIC config, IRQ enable/disable 
-SYSTICK - milisecond delay, tick counter
+- RCC     - HSI/HSE/PLL config, clock getter functions, MCO
+- GPIO    - Input/Output/AF/Analog, EXTI setup
+- UART    - TX/RX polling
+- SPI     - Full/Half duplex, TX/RX polling
+- I2C     - Master TX/RX, Standard mode
+- TIM     - Basic timer, delay
+- EXTI    - NVIC config, IRQ enable/disable 
+- SYSTICK - milisecond delay, tick counter
 
 ## Prerequisites
 To build this project you need to install the following packages
