@@ -23,7 +23,7 @@ void irq_enable(uint8_t irq_num) {
 
 void irq_disable(uint8_t irq_num) {
     if (irq_num <= 31)
-        *NVIC_ICER0 |= (1U << irq_num);
+        *NVIC_ICER0 = (1U << irq_num);
     else if (irq_num > 31 && irq_num < 64)
         *NVIC_ICER1 |= (1U << (irq_num % 32));
     else if (irq_num >= 64 && irq_num < 96)

@@ -34,10 +34,10 @@ int main(void) {
 
     GPIO_init(&led);
 
-    irq_enable(NVIC_IRQ_TIM2);
+    //irq_enable(NVIC_IRQ_TIM2);
         
     while (1) {
-        //GPIO_toggle_ODR_pin(led.GPIO_reg, led.GPIO_config.pin);
-        //TIM_delay(tim.TIM2_TIM5_reg, 1000);
+        GPIO_toggle_ODR_pin(led.GPIO_reg, led.GPIO_config.pin);
+        TIM_delay(tim.TIM2_TIM5_reg, 1000);
     }
 }

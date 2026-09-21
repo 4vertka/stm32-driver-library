@@ -72,10 +72,8 @@ uint8_t USART2_receive_char_IT(void) {
 }
 
 uint8_t USART2_receive_char(void) {
-    while (USART2->SR & (1 << 5)) {
-        return USART2->DR;
-    }
-    return 0;
+    while (!(USART2->SR & (1U << 5))) {}
+    return (uint8_t)USART2->DR;
 }
 
 int32_t _write(int32_t handle, uint8_t* data, int32_t size) {

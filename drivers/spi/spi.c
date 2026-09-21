@@ -54,11 +54,11 @@ void SPI_init(SPI_handle_t* SPI_handle) {
 
 void SPI_deinit(SPI_reg_t* SPI_reg) {
     //wait until RXNE=1 
-    while (!((SPI_reg->SR) & (1U << 0))) {}
+    //while (!((SPI_reg->SR) & (1U << 0))) {}
     //wait until TXE=1
     while (!((SPI_reg->SR)& (1U << 1))) {}
     //wait until BSY=1 
-    while (((SPI_reg->SR) & (1U << 7))) {}              //wait for BSY bit to reset
+    while (SPI_reg->SR & (1U << 7)) {}              //wait for BSY bit to reset
     SPI_reg->CR1 &= ~(1U << 6);                         //disable spi (SPE)
 
     if (SPI_reg == SPI1) 
@@ -74,7 +74,7 @@ void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t *data, uint32_t size) {
     int i = 0;
     while (i < size) {
         while (!((SPI_reg->SR) & (1U << 1))) {}             //wait for TXE bit until TX buffer is empty
-        SPI1->DR = data[i];
+        SPI_reg->DR = data[i];
         i++;
     }
 
