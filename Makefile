@@ -1,43 +1,44 @@
 CC = arm-none-eabi-gcc
 OBJCOPY = arm-none-eabi-objcopy
 
-CFLAGS ?= -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -g -O0 -Xlinker -Map=main.map
+CFLAGS ?= -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -g -O0 
+LINKER_SCRIPT = ./link.ld
+LINKER_FLAGS = -nostdlib -T$(LINKER_SCRIPT)
 
 SRC_DIR = src
 DRIVERS_DIR = drivers
 STARTUP_DIR = startup
+EXAMPLE_DIR = examples
 
 BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/obj
 
-LINKER_SCRIPT = ./link.ld
-LINKER_FLAGS = -nostdlib -T$(LINKER_SCRIPT)
-
-TARGET = main.elf
-BIN = main.bin
-LIB = libstm32driver.a
-
-
-MAIN_SRC = $(SRC_DIR)/main.c
 DRIVERS_SRC = $(shell find $(DRIVERS_DIR) -name '*.c')
 STARTUP_SRC = $(STARTUP_DIR)/startup.c
-
-SRCS = $(MAIN_SRC) $(DRIVERS_SRC) $(STARTUP_SRC)
-
 DRIVERS_INC = $(shell find $(DRIVERS_DIR) -type d)
 INC_FLAGS = $(addprefix -I, $(DRIVERS_INC))
 
-OBJECT_FILES = $(SRCS:.c=.o)
+COMMON_SRC = $(DRIVERS_SRC) $(STARTUP_SRC)
+COMMON_OBJ = $(patsubst %.c,$(OBJ_DIR)/%.o,$(COMMON_SRC))
 
-all: $(BUILD_DIR)/$(TARGET) $(BUILD_DIR)/$(BIN)
+MAIN_SRC = $(SRC_DIR)/main.c
+MAIN_OBJ = $(patsubst %.c,$(OBJ_DIR)/%.o,$(MAIN_SRC))
 
-$(BUILD_DIR)/$(TARGET): $(OBJECT_FILES)
-	$(shell mkdir -p $(BUILD_DIR))
-	$(CC) $(CFLAGS) $(LINKER_FLAGS) -o $@ $^ -lgcc
+EXAMPLE_SRCS = $(wildcard $(EXAMPLES_DIR)/*.c) 
+EXAMPLE_NAMES = $(basename $(notdir $(EXAMPLE_SRCS)))
 
-%.o: %.c
+# Generic build rule
+$(OBJ_DIR)/%.o: %.c 
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
-$(BUILD_DIR)/$(BIN): $(BUILD_DIR)/$(TARGET)
+all: $(BUILD_DIR)/main.elf $(BUILD_DIR)/main.bin
+
+$(BUILD_DIR)/main.elf: $(MAIN_OBJ) $(COMMON_OBJ)
+	@mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -Xlinker -Map=$(BUILD_DIR)/main.map $(LINKER_FLAGS) -o $@ $^ -lgcc
+
+$(BUILD_DIR)/main.bin: $(BUILD_DIR)/main.elf
 	$(OBJCOPY) -O binary $< $@
 
 flash: $(BUILD_DIR)/$(BIN)
@@ -57,8 +58,6 @@ connect: $(BUILD_DIR)/$(TARGET)
 $(LIB): $(OBJECT_FILES)
 	ar rcs $@ $i
 
-lib: $(LIB)
-
 clean:
-	rm -rf $(BUILD_DIR) $(shell find $(DRIVERS_DIR) -name '*.o') $(STARTUP_DIR)/*.o $(SRC_DIR)/*.o ./*.map $(LIB)
+	rm -rf $(BUILD_DIR)
 
