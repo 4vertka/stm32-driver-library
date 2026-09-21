@@ -55,27 +55,27 @@ brew install arm-none-eabi-gcc stlink openocd make
 ```
 
 ## Build
-### Build elf/bin image
+#### Build elf/bin image
 ```
 make all 
 ```
-### Flash firmware
+#### Flash firmware
 ```
 make flash
 ```
-### Start debugging with OpenOCD and connect to debugger using GDB
+#### Start debugging with OpenOCD and connect to debugger using GDB
 ```
 make debug
 make connect
 ```
-### Clean project 
+#### Clean project 
 ```
 make clean
 ```
 
 ## API reference
 
-### RCC -> drivers/rcc
+#### RCC -> drivers/rcc
 ```
 // Init system clokc to external 84MHZ clock via PLL
 void RCC_SysClock_Init(void);
@@ -107,7 +107,7 @@ void RCC_TIM2_bus_clock_enable(void);
 void RCC_TIM2_bus_clock_disable(void);
 ```
 
-### GPIO -> drivers/gpio 
+#### GPIO -> drivers/gpio 
 ```
 // Init/deinit GPIO pin 
 void GPIO_init(GPIO_handle_t* handle);
@@ -138,7 +138,7 @@ void GPIO_SPI_pins_enable(void);
 void GPIO_I2C_pins_enable(void);
 ```
 
-### UART -> drivers/uart (currently only for USART2)
+#### UART -> drivers/uart (currently only for USART2)
 ```
 // Configure USART2
 void USART2_config(USART_handle_t* USART_handle);
@@ -150,7 +150,7 @@ void USART2_transmit_string(uint8_t* string);
 uint8_t USART2_receive_char(void);
 ```
 
-### SPI -> drivers/spi (currently onle for SPI1)
+#### SPI -> drivers/spi (currently onle for SPI1)
 ```
 // SPI init/deinit 
 void SPI_init(SPI_handle_t* SPI_handle);
@@ -164,7 +164,7 @@ void SPI_receive(SPI_reg_t* SPI_reg, uint8_t* data, uint32_t size);
 void SPI1_enable_interrupt(SPI_reg_t* SPI_reg);
 ```
 
-### I2C -> drivers/i2c
+#### I2C -> drivers/i2c
 ```
 // I2C init/deinit 
 void I2C_init(I2C_handle_t* I2C_handle);
@@ -175,7 +175,7 @@ void I2C_transmit(I2C_reg_t* I2C_reg,uint8_t address, uint8_t* buffer, uint32_t 
 void I2C_receive(I2C_reg_t* I2C_reg, uint8_t address, uint8_t* buffer, uint32_t size);
 ```
 
-### TIM -> drivers/pwm (currently only for TIM2-TIM5)
+#### TIM -> drivers/pwm (currently only for TIM2-TIM5)
 ```
 // TIM init 
 void TIM2_TIM5_init(TIM2_TIM5_handle_t* tim);
@@ -184,7 +184,7 @@ void TIM2_TIM5_init(TIM2_TIM5_handle_t* tim);
 void TIM_delay(TIM2_TIM5_reg_t* tim, uint32_t ms);
 ```
 
-### EXTI -> drivers/exti
+#### EXTI -> drivers/exti
 ```
 // EXTI setup
 void irq_exti_setup(uint8_t pin, uint8_t mode);
@@ -200,7 +200,7 @@ void irq_disable(uint8_t irq_num);
 void EXTI_clear_pending(uint8_t pin);
 ```
 
-### SYSTICK -> drivers/systick
+#### SYSTICK -> drivers/systick
 ```
 // SYSTICK init
 void SYSTICK_init(uint32_t ticks, uint8_t clk_src, uint8_t ext, uint8_t enable_clock);
