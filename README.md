@@ -218,8 +218,8 @@ make flash-example-gpio
 make flash-example-uart
 make flash-example-spi
 ```
-
-### GPIO/SYSTICK EXAMPLE
+## Examples code 
+#### GPIO
 ```C 
 #include <generic.h>
 #include <gpio.h>
@@ -248,7 +248,7 @@ int main() {
 }
 ```
 
-### UART EXAMPLE 
+#### UART 
 ```C
 #include "rcc.h"
 #include "systick.h"
@@ -279,7 +279,7 @@ int main() {
 
 ```
 
-### SPI EXAMPLE
+#### SPI
 ```C 
 #include "exti.h"
 #include <generic.h>
