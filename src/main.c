@@ -6,7 +6,6 @@
 #include <stdint.h>
 #include <gpio.h>
 #include <generic.h>
-#include <ringbuffer.h>
 #include <pwm.h>
 #include <exti.h>
 

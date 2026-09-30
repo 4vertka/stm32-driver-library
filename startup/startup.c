@@ -1,5 +1,4 @@
 #include <generic.h>
-#include <ringbuffer.h>
 #include <gpio.h>
 #include <systick.h>
 #include <uart.h>
@@ -10,15 +9,6 @@ int main(void);
 
 volatile uint8_t rx_char;
 static volatile uint8_t led_on = 0;
-
-volatile char rb_buf[ RING_BUFFER_SIZE + 1 ];
-ring_buffer_t rb = {
-  len: RING_BUFFER_SIZE,
-  buf: rb_buf,
-  pos: 0,
-  ext: 0
-};
-volatile int newline = 0;
 
 extern void _estack(void);
 
@@ -153,7 +143,6 @@ void I2C2_EV_IRQ_Handler(void) {}
 void I2C2_ER_IRQ_Handler(void) {}
 
 void SPI1_IRQ_Handler(void) {
-    int i = 0;
 
 }
 
@@ -162,20 +151,6 @@ void SPI2_IRQ_Handler(void) {}
 void USART1_IRQ_Handler(void) {}
 
 void USART2_IRQ_Handler(void) {
-    //check if the interrupt source is RXNE
-    /*if ((USART2->SR & (1U << 5))) {
-        rx_char = USART2->DR;
-        USART2_transmit_char(rx_char);
-        USART2_transmit_char('\r');
-        USART2_transmit_char('\n');
-        USART2->SR &= ~(1U << 5);
-    }*/ 
-
-    if (USART2->SR & (1U << 5)) {
-        uint8_t ch = USART2->DR;
-        ringbuf_write(rb, ch);
-        if (ch == '\r') newline = 1;
-    }
 
 }
 
