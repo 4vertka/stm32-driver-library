@@ -79,7 +79,7 @@ void SPI_transmit(SPI_reg_t* SPI_reg, uint8_t *data, uint32_t size) {
     }
 
     while (!((SPI_reg->SR) & (1U << 1))) {}
-    while (!((SPI_reg->SR) & (1U << 7))) {}                  //check if SPI is not busy
+    while (SPI_reg->SR & (1U << 7)) {}                  //check if SPI is not busy
 
     //Clear the Overrun flag by reading DR and SR
     uint8_t tmp = SPI_reg->DR;
